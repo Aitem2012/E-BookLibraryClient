@@ -1,7 +1,44 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    
+<div class="d-flex text-center row">
+    <div class="d-flex row col-5 ofset-1">
+        <div class="col-6">Hello</div>
+        <div class="col-6">Hello</div>
+        <div class="col-6">Hello</div>
+        <div class="col-6">Hello</div>
+    </div>
+    <div class="d-flex row col-5 ofset-1">
+        <div class="col-6">Hello</div>
+        <div class="col-6">Hello</div>
+        <div class="col-6">Hello</div>
+        <div class="col-6">Hello</div>
+    </div>
 </div>
+
+<div class="d-flex text-center row">
+    @for (int i = 0; i < 50; i++)
+    {
+        <div class="card col-lg-3 col-sm-6 col-md-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img asp-append-version="true" src="/images/book1.jpg" alt="book1" style="min-width:98%" />
+                </div>
+            </div>
+            <div class="card-footer">
+                <div>
+                    <strong>The Lost Apothecary-</strong>
+                </div>
+                <div>
+                    <strong>Fiction</strong>
+                </div>
+                <div>
+                    <small>Sarah Penner</small>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
