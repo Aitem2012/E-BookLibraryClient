@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OnlineBookLibraryClient.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace OnlineBookLibraryClient.Controllers
 {
-    public class AuthController :Controller
+    public class AuthController : Controller
     {
+        //private readonly UserManager _userManager;
         private readonly ILogger<AuthController> _logger;
 
         public AuthController(ILogger<AuthController> logger)
@@ -25,8 +27,19 @@ namespace OnlineBookLibraryClient.Controllers
 
         [HttpGet]
         public IActionResult Register()
-        {
+        { 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(RegisterUserViewModel registerModel)
+        {
+            if (ModelState.IsValid)
+            {
+                return View();
+            }
+            ModelState.AddModelError("FirstName", "Please fill it");
+            return View(registerModel);
         }
     }
 }
