@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OnlineBookLibrary.Lib.DTO\OnlineBookLibrary.Lib.DTO.csproj" />
     <ProjectReference Include="..\OnlineBookLibraryClient.Lib.Model\OnlineBookLibraryClient.Lib.Model.csproj" />
   </ItemGroup>
 
