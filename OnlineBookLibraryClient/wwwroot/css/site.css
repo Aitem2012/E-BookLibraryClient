@@ -19,7 +19,6 @@ a {
     top: 50%;
     left: 50%;
     background: #191919;
-    ;
     text-align: center;
     transition: 0.25s;
     margin-top: 50px
@@ -74,13 +73,23 @@ a {
 
 
 .card {
-    //margin-bottom: 20px;
+    margin-bottom: 20px;
     border: none
 }
 
+.login{
+    height: 50vh;
+    width:60%;
+    margin: 60px auto;
+}
 
-
-
+.register {
+    
+    height: 90vh;
+    width: 60%;
+    margin: 60px auto;
+    
+}
 
 
 .btn-primary {
