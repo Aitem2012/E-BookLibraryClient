@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OnlineBookLibrary.Lib.Core\OnlineBookLibrary.Lib.Core.csproj" />
     <ProjectReference Include="..\OnlineBookLibraryClient.Lib.Model\OnlineBookLibraryClient.Lib.Model.csproj" />
   </ItemGroup>
 

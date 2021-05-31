@@ -5,15 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineBookLibraryClient.Lib.Model
+namespace OnlineBookLibrary.Lib.DTO
 {
-    public class Author
+    public class UserDTO
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
-        public IEnumerable<Book> Books { get; set; }
     }
 }
