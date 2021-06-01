@@ -6,11 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OnlineBookLibrary.Lib.Core.Interfaces;
 using OnlineBookLibraryClient.Lib.Infrastructure;
+using OnlineBookLibraryClient.Lib.Infrastructure.Implementations;
 using OnlineBookLibraryClient.Lib.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OnlineBookLibraryClient
@@ -28,7 +31,12 @@ namespace OnlineBookLibraryClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IPublisherRepository, PublisherRepository>();
             services.AddDbContextPool<LibraryDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("Default")));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<LibraryDbContext>();
             services.Configure<IdentityOptions>(
                 options =>
