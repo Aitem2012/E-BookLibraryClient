@@ -72,22 +72,22 @@ a {
         }
 
 
-.card {
+/*.card {
     margin-bottom: 20px;
     border: none
-}
+}*/
 
 .login{
-    height: 50vh;
+    /*height: 50vh;*/
     width:60%;
     margin: 60px auto;
 }
 
 .register {
     
-    height: 90vh;
+   /* height: 90vh;*/
     width: 60%;
-    margin: 60px auto;
+    margin: 50px auto;
     
 }
 
@@ -143,7 +143,7 @@ body {
   margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
