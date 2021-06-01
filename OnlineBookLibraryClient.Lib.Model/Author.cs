@@ -12,7 +12,8 @@ namespace OnlineBookLibraryClient.Lib.Model
         [Key]
         public int Id { get; set; }
         [Required]
-        public string AuthorName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public IEnumerable<Book> Books { get; set; }
     }
 }
