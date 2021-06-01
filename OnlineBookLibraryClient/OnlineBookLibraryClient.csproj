@@ -17,4 +17,8 @@
     <ProjectReference Include="..\OnlineBookLibraryClient.Lib.Infrastructure\OnlineBookLibraryClient.Lib.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\MVCController\" />
+  </ItemGroup>
+
 </Project>
