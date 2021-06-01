@@ -16,14 +16,14 @@ namespace OnlineBookLibrary.Lib.Core.Services
             return new Book
             {
                 Title = model.Title,
-                Genre = model.Genre,
+                GenreId = model.Genre.Id,
                 Language = model.Language,
                 Photo = model.Photo,
-                Publisher = model.Publisher,
+                PublisherId = model.Publisher.Id,
                 PublicationDate = model.PublicationDate,
                 ISBN = model.ISBN,
                 DateAddedToLibrary = model.DateAddedToLibrary,
-                Author = model.Author,
+                AuthorId = model.Author.Id,
                 Pages = model.Pages,
                 Description = model.Description,
                 Rating = model.Rating

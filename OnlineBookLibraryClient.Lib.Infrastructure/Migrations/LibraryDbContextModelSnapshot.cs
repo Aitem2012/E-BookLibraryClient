@@ -16,21 +16,6 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.6");
 
-            modelBuilder.Entity("AuthorBook", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BooksId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AuthorId", "BooksId");
-
-                    b.HasIndex("BooksId");
-
-                    b.ToTable("AuthorBook");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -250,12 +235,23 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "William",
+                            LastName = "Shakespeare"
+                        });
                 });
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateAddedToLibrary")
@@ -284,7 +280,7 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
                     b.Property<DateTime>("PublicationDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PublisherId")
+                    b.Property<int>("PublisherId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Rating")
@@ -296,11 +292,57 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorId");
+
                     b.HasIndex("GenreId");
 
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            DateAddedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            GenreId = 1,
+                            ISBN = "2787498230",
+                            Language = "English",
+                            Pages = 0,
+                            PublicationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PublisherId = 1,
+                            Rating = 0,
+                            Title = "Hamlet"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 1,
+                            DateAddedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            GenreId = 1,
+                            ISBN = "2787437787",
+                            Language = "Spanish",
+                            Pages = 0,
+                            PublicationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PublisherId = 2,
+                            Rating = 0,
+                            Title = "King Lear"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AuthorId = 1,
+                            DateAddedToLibrary = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            GenreId = 2,
+                            ISBN = "898327893484",
+                            Language = "Chinese",
+                            Pages = 0,
+                            PublicationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PublisherId = 1,
+                            Rating = 0,
+                            Title = "Othello"
+                        });
                 });
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Genre", b =>
@@ -316,6 +358,18 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GenreName = "Fictional"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GenreName = "Non-Fictional"
+                        });
                 });
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Publisher", b =>
@@ -331,6 +385,18 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Publishers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PublisherName = "University Press"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PublisherName = "MacMillian Press Ltd"
+                        });
                 });
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Review", b =>
@@ -360,21 +426,6 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("AuthorBook", b =>
-                {
-                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Author", null)
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Book", null)
-                        .WithMany()
-                        .HasForeignKey("BooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -430,19 +481,23 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Book", b =>
                 {
-                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Genre", "Genre")
+                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Author", null)
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Genre", null)
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Publisher", "Publisher")
+                    b.HasOne("OnlineBookLibraryClient.Lib.Model.Publisher", null)
                         .WithMany("Book")
-                        .HasForeignKey("PublisherId");
-
-                    b.Navigation("Genre");
-
-                    b.Navigation("Publisher");
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Review", b =>
@@ -456,6 +511,11 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Migrations
                         .HasForeignKey("BookId");
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Author", b =>
+                {
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("OnlineBookLibraryClient.Lib.Model.Book", b =>

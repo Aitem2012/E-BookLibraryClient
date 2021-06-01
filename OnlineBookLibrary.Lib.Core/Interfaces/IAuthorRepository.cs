@@ -9,7 +9,7 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
 {
     public interface IAuthorRepository : ICRUDRepository<Author>
     {
-        public Author GetAuthor(string firstName);
+        public Author GetAuthor(int id);
         public IQueryable<Author> GetAuthors();
     }
 }

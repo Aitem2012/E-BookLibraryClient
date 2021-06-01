@@ -31,9 +31,9 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Implementations
             return false;
         }
 
-        public Author GetAuthor(string firstName)
+        public Author GetAuthor(int id)
         {
-            return _ctx.Authors.FirstOrDefault(x => x.FirstName == firstName);
+            return _ctx.Authors.FirstOrDefault(x => x.Id == id);
         }
 
         public IQueryable<Author> GetAuthors()
