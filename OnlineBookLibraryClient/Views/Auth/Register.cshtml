@@ -4,85 +4,86 @@
 }
 
 
-<div class="container row">
+<div class="container row register">
     <div class="card bg-dark justify-content-sm-center align-content-center col-lg-8 offset-lg-2 col-sm-12" style="width:100%">
         <div class="card-body bg-dark text-white">
-        <form class="col" action="" method="post">
-            <div asp-validation-summary="ModelOnly"></div>
-            <div class="form-group">
-                <div class="">
-                    <label asp-for="FirstName" class="control-label"></label>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+            <h2 class="text-xl-center">Register</h2>
+            <form class="col" action="" method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group">
+                    <div class="">
+                        <label asp-for="FirstName" class="control-label"></label>
                     </div>
-                    <input asp-for="FirstName" class="form-control border-0" type="text" placeholder="First Name"/>
-                </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                        </div>
+                        <input asp-for="FirstName" class="form-control border-0" type="text" placeholder="First Name" />
+                    </div>
                     <span asp-validation-for="FirstName" class="text-warning small"></span>
-            </div>
+                </div>
 
-            <div class="form-group">
-                <div class="">
-                    <label asp-for="LastName"></label>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+                <div class="form-group">
+                    <div class="">
+                        <label asp-for="LastName"></label>
                     </div>
-                    <input class="form-control border-0" type="text" placeholder="LastName" asp-for="LastName" />
-                </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                        </div>
+                        <input class="form-control border-0" type="text" placeholder="LastName" asp-for="LastName" />
+                    </div>
                     <span asp-validation-for="LastName" class="text-warning small"></span>
-            </div>
+                </div>
 
-            <div class="form-group">
-                <div>
-                    <label class="" asp-for="@Model.Email"></label>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                <div class="form-group">
+                    <div>
+                        <label class="" asp-for="@Model.Email"></label>
                     </div>
-                    <input class="form-control border-0" type="text" placeholder="Email" asp-for="Email"/>
-                </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                        </div>
+                        <input class="form-control border-0" type="text" placeholder="Email" asp-for="Email" />
+                    </div>
                     <span asp-validation-for="Email" class="text-warning small"></span>
-            </div>
+                </div>
 
-            <div class="form-group">
-                <div class="">
-                    <label class="" asp-for="@Model.Password"></label>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                <div class="form-group">
+                    <div class="">
+                        <label class="" asp-for="@Model.Password"></label>
                     </div>
-                    <input class="form-control border-0" placeholder="Password" type="password" asp-for="Password" />
-                </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                        </div>
+                        <input class="form-control border-0" placeholder="Password" type="password" asp-for="Password" />
+                    </div>
                     <span asp-validation-for="Password" class="text-warning small"></span>
-            </div>
+                </div>
 
-            <div class="form-group">
-                <div class="">
-                    <label class="" asp-for="@Model.ConfirmPassword"></label>
-                </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            <i class="fa fa-check-circle"></i>
-                        </span>
+                <div class="form-group">
+                    <div class="">
+                        <label class="" asp-for="@Model.ConfirmPassword"></label>
                     </div>
-                    <input class="form-control border-0" placeholder="Password" type="password" asp-for="ConfirmPassword" />
-                </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-check-circle"></i>
+                            </span>
+                        </div>
+                        <input class="form-control border-0" placeholder="Password" type="password" asp-for="ConfirmPassword" />
+                    </div>
                     <span asp-validation-for="ConfirmPassword" class="text-warning small"></span>
-            </div>
-            <div class="form-group row text-white">
-                <div class="col-8 offset-2">
-                    <input type="submit" asp-action="post" value="Register" class="btn btn-outline-primary btn-dark text-white mr-3" />
-                    <input type="reset" value="Reset" class="btn btn-outline-primary btn-dark text-white" style="width:85px" />
                 </div>
-            </div>
-        </form>
-    </div>
+                <div class="form-group row text-white mt-4 ml-1">
+                    <div class="col-8 offset-2">
+                        <input type="submit" asp-action="post" value="Register" class="btn btn-outline-primary btn-dark text-white mr-3" />
+                        <input type="reset" value="Reset" class="btn btn-outline-primary btn-dark text-white" style="width:85px" />
+                    </div>
+                </div>
+            </form>
+        </div>
         </div>
 </div>
 
