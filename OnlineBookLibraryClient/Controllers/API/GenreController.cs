@@ -26,7 +26,11 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         public async Task<IActionResult> Post([FromBody] GenreRegisterDTO model)
         {
+<<<<<<< HEAD
+            var genreExist = _genre.GetGenre(model.Id);
+=======
             var genreExist = _genre.GetGenre(model.GenreName);
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
             if (genreExist != null)
             {
                 return BadRequest("Genre Exist");
@@ -55,6 +59,15 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
 
         [HttpGet]
+<<<<<<< HEAD
+        [Route("{id}")]
+        public IActionResult GetGenre(int id)
+        {
+            try
+            {
+                var genre = _genre.GetGenre(id);
+                if (genre == null) return BadRequest($"No Genre with the name of {id}");
+=======
         [Route("{name}")]
         public IActionResult GetGenre(string name)
         {
@@ -62,6 +75,7 @@ namespace OnlineBookLibraryClient.Controllers.API
             {
                 var genre = _genre.GetGenre(name);
                 if (genre == null) return BadRequest($"No Genre with the name of {name}");
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 return Ok(genre);
             }
@@ -73,6 +87,15 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
 
         [HttpPut]
+<<<<<<< HEAD
+        [Route("update/{id}")]
+        public async Task<IActionResult> UpdateGenre(int id, GenreRegisterDTO model)
+        {
+            try
+            {
+                var genre = _genre.GetGenre(id);
+                if (genre == null) return BadRequest($"No Genre with the name of {id}");
+=======
         [Route("update/{name}")]
         public async Task<IActionResult> UpdateGenre(string name, GenreRegisterDTO model)
         {
@@ -80,6 +103,7 @@ namespace OnlineBookLibraryClient.Controllers.API
             {
                 var genre = _genre.GetGenre(name);
                 if (genre == null) return BadRequest($"No Genre with the name of {name}");
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 genre.GenreName = model.GenreName;
 
@@ -93,12 +117,21 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
         [HttpDelete]
         [Route("delete/{id}")]
+<<<<<<< HEAD
+        public async Task<IActionResult> DeleteGenre(int id)
+        {
+            try
+            {
+                var genre = _genre.GetGenre(id);
+                if (genre == null) return BadRequest($"No Genre with the name of {id}");
+=======
         public async Task<IActionResult> DeleteGenre(string name)
         {
             try
             {
                 var genre = _genre.GetGenre(name);
                 if (genre == null) return BadRequest($"No Genre with the name of {name}");
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 await _genre.Delete(genre);
                 return Ok("Genre has been successfully deleted");

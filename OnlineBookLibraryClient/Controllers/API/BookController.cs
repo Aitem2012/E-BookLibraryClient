@@ -76,7 +76,11 @@ namespace OnlineBookLibraryClient.Controllers.API
         {
             try
             {
+<<<<<<< HEAD
+                var books = _bookRepo.GetBooks() as List<Book>;
+=======
                 var books = _bookRepo.GetBooks().ToList();
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
                 if (books.Count <= 0)
                 {
                     return NotFound("No Books in this library");
@@ -122,12 +126,20 @@ namespace OnlineBookLibraryClient.Controllers.API
         {
             var bookExist = _bookRepo.GetBook(bookToAdd.ISBN);
             if (bookExist != null) return BadRequest("Book Exist");
+<<<<<<< HEAD
+            var genre = _genre.GetGenre(bookToAdd.Genre.Id);
+=======
             var genre = _genre.GetGenre(bookToAdd.Genre.GenreName);
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
             if (genre == null) return NotFound("Genre Does not Exist");
 
             await _genre.Update(genre);
 
+<<<<<<< HEAD
+            var author = _author.GetAuthor(bookToAdd.Author.Id);
+=======
             var author = _author.GetAuthor(bookToAdd.AuthorId);
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
             if (author == null) return NotFound("Author Does Not Exist");
             await _author.Update(author);
 

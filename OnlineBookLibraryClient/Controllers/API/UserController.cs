@@ -24,7 +24,12 @@ namespace OnlineBookLibraryClient.Controllers.API
         private readonly SignInManager<AppUser> _signManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
+<<<<<<< HEAD
+        private readonly JwtConfig _options;
+        private readonly IOptionsMonitor<JwtConfig> options;
+=======
         private readonly IOptionsMonitor<JwtConfig> _options;
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
         public UserController(LibraryDbContext context, UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signManager, RoleManager<IdentityRole> roleManager,
@@ -35,7 +40,11 @@ namespace OnlineBookLibraryClient.Controllers.API
             _signManager = signManager;
             _roleManager = roleManager;
             _mapper = mapper;
+<<<<<<< HEAD
+            _options = options.CurrentValue;
+=======
             _options = options;
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
         }
 
         [HttpPost]
@@ -81,7 +90,11 @@ namespace OnlineBookLibraryClient.Controllers.API
                 return BadRequest("something went wrong");
             }
 
+<<<<<<< HEAD
+            var tokenGen = new TokenGenerator(_userManager, options);
+=======
             var tokenGen = new TokenGenerator(_userManager, _options);
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
             var token = await tokenGen.GenerateToken(user);
             if (token == null)
             {

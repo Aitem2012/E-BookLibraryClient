@@ -1,4 +1,5 @@
-﻿using OnlineBookLibrary.Lib.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineBookLibrary.Lib.Core.Interfaces;
 using OnlineBookLibraryClient.Lib.Model;
 using System;
 using System.Collections.Generic;
@@ -38,15 +39,16 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Implementations
             return _ctx.Books.FirstOrDefault(x => x.ISBN == isbn);
         }
 
-        public IQueryable<Book> GetBooks()
+        public IQueryable<Book>  GetBooks()
         {
-
-            return _ctx.Books.Select(x => x);
+            
+            var bookList = _ctx.Books.Select(x => x);
+            return bookList;
         }
 
         public IQueryable<Book> GetBooksByAuthor(Author author)
         {
-            return _ctx.Books.Where(x => x.Author == author).Select(x => x);
+            return _ctx.Books.Where(x => x.AuthorId == author.Id).Select(x => x);
         }
 
         public IQueryable<Book> GetBooksByPublicationYear(DateTime date)

@@ -9,7 +9,8 @@ namespace OnlineBookLibrary.Lib.DTO.AuthorRegister
 {
     public class AuthorRegisterDTO
     {
-        
+
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public IEnumerable<Book> Book { get; set; }
