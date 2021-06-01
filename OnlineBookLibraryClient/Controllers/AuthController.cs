@@ -41,5 +41,11 @@ namespace OnlineBookLibraryClient.Controllers
             ModelState.AddModelError("FirstName", "Please fill it");
             return View(registerModel);
         }
+
+        [HttpGet]
+        public IActionResult UserDashBoard()
+        {
+            return View();
+        }
     }
 }
