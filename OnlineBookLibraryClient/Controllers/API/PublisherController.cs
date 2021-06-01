@@ -26,11 +26,7 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         public async Task<IActionResult> Post([FromBody] PublisherRegisterDTO model)
         {
-<<<<<<< HEAD
             var publisherExist = _publisher.GetPublisher(model.Id);
-=======
-            var publisherExist = _publisher.GetPublisher(model.PublisherName);
->>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
             if (publisherExist != null)
             {
                 return BadRequest("Publisher Exist");
@@ -60,21 +56,12 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         [HttpGet]
         [Route("{name}")]
-<<<<<<< HEAD
-        public IActionResult GetPublisher(int id)
-        {
-            try
-            {
-                var publisher = _publisher.GetPublisher(id);
-                if (publisher == null) return BadRequest($"No Publisher with the name of {id}");
-=======
-        public IActionResult GetPublisher(string name)
+        public IActionResult GetPublisher(int name)
         {
             try
             {
                 var publisher = _publisher.GetPublisher(name);
                 if (publisher == null) return BadRequest($"No Publisher with the name of {name}");
->>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 return Ok(publisher);
             }
@@ -88,21 +75,12 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         [HttpPut]
         [Route("update/{name}")]
-<<<<<<< HEAD
-        public async Task<IActionResult> UpdatePublisher(int id, PublisherRegisterDTO model)
-        {
-            try
-            {
-                var publisher = _publisher.GetPublisher(id);
-                if (publisher == null) return BadRequest($"No Publisher with the name of {id}");
-=======
-        public async Task<IActionResult> UpdatePublisher(string name, PublisherRegisterDTO model)
+        public async Task<IActionResult> UpdatePublisher(int name, PublisherRegisterDTO model)
         {
             try
             {
                 var publisher = _publisher.GetPublisher(name);
                 if (publisher == null) return BadRequest($"No Publisher with the name of {name}");
->>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 publisher.PublisherName = model.PublisherName;
 
@@ -116,21 +94,12 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
         [HttpDelete]
         [Route("delete/{name}")]
-<<<<<<< HEAD
-        public async Task<IActionResult> DeletePublisher(int id)
-        {
-            try
-            {
-                var publisher = _publisher.GetPublisher(id);
-                if (publisher == null) return BadRequest($"No Publisher with the name of {id}");
-=======
-        public async Task<IActionResult> DeletePublisher(string name)
+        public async Task<IActionResult> DeletePublisher(int name)
         {
             try
             {
                 var publisher = _publisher.GetPublisher(name);
                 if (publisher == null) return BadRequest($"No Publisher with the name of {name}");
->>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 await _publisher.Delete(publisher);
                 return Ok("Publisher has been successfully deleted");

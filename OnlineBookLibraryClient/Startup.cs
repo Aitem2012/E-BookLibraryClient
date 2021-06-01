@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-<<<<<<< HEAD
-using OnlineBookLibrary.Lib.Core.Interfaces;
-using OnlineBookLibrary.Lib.Core.Services;
-=======
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookLibrary.Lib.Core;
 using OnlineBookLibrary.Lib.Core.Interfaces;
->>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 using OnlineBookLibraryClient.Lib.Infrastructure;
 using OnlineBookLibraryClient.Lib.Infrastructure.Implementations;
 using OnlineBookLibraryClient.Lib.Model;
@@ -58,17 +52,6 @@ namespace OnlineBookLibraryClient
                     options.Password.RequiredUniqueChars = 0;
                 }
                 );
-<<<<<<< HEAD
-            services.AddScoped<IGenreRepository, GenreRepository>();
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IPublisherRepository, PublisherRepository>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<IAuthorService, AuthorServices>();
-            services.AddScoped<IGenreService, GenreService>();
-            services.AddScoped<IPublisherService, PublisherService>();
-
-=======
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,7 +71,6 @@ namespace OnlineBookLibraryClient
                     RequireExpirationTime = false
                 };
             });
->>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
