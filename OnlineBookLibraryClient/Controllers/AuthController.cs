@@ -47,5 +47,9 @@ namespace OnlineBookLibraryClient.Controllers
         {
             return View();
         }
+        public IActionResult AdminDashboard()
+        {
+            return View();
+        }
     }
 }
