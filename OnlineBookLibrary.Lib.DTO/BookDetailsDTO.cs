@@ -9,6 +9,7 @@ namespace OnlineBookLibrary.Lib.DTO
 {
     public class BookDetailsDTO
     {
+        public int Id { get; set; }
         public string Title { get; set; }        
         public Genre Genre { get; set; }
         public string Language { get; set; }

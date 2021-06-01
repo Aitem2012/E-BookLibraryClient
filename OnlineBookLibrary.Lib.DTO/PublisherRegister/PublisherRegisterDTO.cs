@@ -9,6 +9,7 @@ namespace OnlineBookLibrary.Lib.DTO.PublisherRegister
 {
     public class PublisherRegisterDTO
     {
+        public int Id { get; set; }
         public string PublisherName { get; set; }
         public IEnumerable<Book> Books { get; set; }
     }

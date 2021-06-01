@@ -24,10 +24,7 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //builder.Entity<Author>()
-            //       .HasMany(a => a.Books)
-            //       .WithOne(m => m.Author)
-            //       .HasForeignKey(m => m.AuthorId);
+           
 
             builder.Entity<Author>().HasData(
                                              new Author

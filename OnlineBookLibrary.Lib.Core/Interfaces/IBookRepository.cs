@@ -10,7 +10,7 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
     public interface IBookRepository : ICRUDRepository<Book>
     {
         public Book GetBook(string isbn);
-        public dynamic GetBooks();
+        public IQueryable<Book> GetBooks();
         public IQueryable<Book> GetBooksByTitle(string title);
         public IQueryable<Book> GetBooksByAuthor(Author author);
         public IQueryable<Book> GetBooksByPublicationYear(DateTime date);

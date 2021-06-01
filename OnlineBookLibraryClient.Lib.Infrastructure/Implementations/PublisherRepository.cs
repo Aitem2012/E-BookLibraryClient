@@ -32,9 +32,9 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Implementations
             return false;
         }
 
-        public Publisher GetPublisher(string publisherName)
+        public Publisher GetPublisher(int id)
         {
-            return _ctx.Publishers.FirstOrDefault(x => x.PublisherName == publisherName);
+            return _ctx.Publishers.FirstOrDefault(x => x.Id == id);
         }
 
         public IQueryable<Publisher> GetPublishers()

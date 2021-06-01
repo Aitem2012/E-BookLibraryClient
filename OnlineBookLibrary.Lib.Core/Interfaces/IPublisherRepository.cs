@@ -9,7 +9,7 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
 {
     public interface IPublisherRepository : ICRUDRepository<Publisher>
     {
-        public Publisher GetPublisher(string publisherName);
+        public Publisher GetPublisher(int id);
         public IQueryable<Publisher> GetPublishers();
         public IQueryable<Publisher> GetPublishersWithBooks(int id);
     }

@@ -38,9 +38,9 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Implementations
 
         }
 
-        public Genre GetGenre(string genreName)
+        public Genre GetGenre(int id)
         {
-            return _ctx.Genres.FirstOrDefault(x => x.GenreName == genreName);
+            return _ctx.Genres.FirstOrDefault(x => x.Id == id);
         }
 
         public IQueryable<Genre> GetGenres()

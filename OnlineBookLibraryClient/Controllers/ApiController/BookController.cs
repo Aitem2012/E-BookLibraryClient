@@ -47,7 +47,7 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
             var bookExist = _bookRepo.GetBook(model.ISBN);
             if (bookExist != null) return BadRequest("Book Exist");
 
-            var genreExist = _genreRepo.GetGenre(model.Genre.GenreName);
+            var genreExist = _genreRepo.GetGenre(model.Genre.Id);
 
             var myGenre = new GenreRegisterDTO
             {
@@ -63,7 +63,7 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
 
             }
 
-            var publisherExist = _publisherRepo.GetPublisher(model.Publisher.PublisherName);
+            var publisherExist = _publisherRepo.GetPublisher(model.Publisher.Id);
 
             var myPublisher = new PublisherRegisterDTO
             {
@@ -108,7 +108,8 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
         [Route("all-books")]
         public IActionResult Get()
         {
-            var books = _bookRepo.GetBooks();
+            var books = _bookService.GetAllBooks();
+            if (books == null) return NotFound("No book found");
             return Ok(books);
         }
 
@@ -117,9 +118,20 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
         public IActionResult Get(int id)
         {
 
-            var author = _authorRepo.GetAuthor(id);
-            return Ok(_bookRepo.GetBooksByAuthor(author));
+            var books = _bookService.GetBooksByAuthor(id).ToList();
+            if (books == null) return NotFound("No Such Author");
+            if (books.Count <= 0) return BadRequest("Author Does Not have Any book");
+            return Ok(books);
         }
-        
+
+        [HttpGet]
+        [Route("get-book-by/{isbn}")]
+        public IActionResult Get(string isbn)
+        {
+            var book = _bookService.GetBookByISBN(isbn);
+            if (book == null) return NotFound("Book Not Found");
+            
+            return Ok(book);
+        }
     }
 }
