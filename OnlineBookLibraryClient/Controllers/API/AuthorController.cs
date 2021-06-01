@@ -31,7 +31,11 @@ namespace OnlineBookLibraryClient.Controllers.API
         {
             try
             {
+<<<<<<< HEAD
                 var authorExist = _author.GetAuthor(model.Id);
+=======
+                var authorExist = _author.GetAuthor(model.FirstName);
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
                 if (authorExist != null) return BadRequest("Author Already Exist");
 
                 var author = new Author
@@ -70,12 +74,21 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         [HttpGet]
         [Route("{id}")]
+<<<<<<< HEAD
         public IActionResult GetAuthor(int id)
         {
             try
             {
                 var author = _author.GetAuthor(id);
                 if (author == null) return BadRequest($"No Author with the ID of {id}");
+=======
+        public IActionResult GetAuthor(string name)
+        {
+            try
+            {
+                var author = _author.GetAuthor(name);
+                if (author == null) return BadRequest($"No Author with the name of {name}");
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 return Ok(author);
             }
@@ -88,12 +101,21 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         [HttpPut]
         [Route("update/{id}")]
+<<<<<<< HEAD
         public async Task<IActionResult> UpdateAuthor(int  id, AuthorRegisterDTO model)
         {
             try
             {
                 var author = _author.GetAuthor(id);
                 if (author == null) return BadRequest($"No Author with the id of {id}");
+=======
+        public async Task<IActionResult> UpdateAuthor(string  name, AuthorRegisterDTO model)
+        {
+            try
+            {
+                var author = _author.GetAuthor(name);
+                if (author == null) return BadRequest($"No Author with the id of {name}");
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 author.FirstName = model.FirstName;
                 author.LastName = model.LastName;
@@ -108,12 +130,21 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
         [HttpDelete]
         [Route("delete/{id}")]
+<<<<<<< HEAD
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             try
             {
                 var author = _author.GetAuthor(id);
                 if (author == null) return BadRequest($"No Author with the name of {id}");
+=======
+        public async Task<IActionResult> DeleteAuthor(string name)
+        {
+            try
+            {
+                var author = _author.GetAuthor(name);
+                if (author == null) return BadRequest($"No Author with the name of {name}");
+>>>>>>> e1d96428121e87aa11b38403acb0c4f4af5d6831
 
                 await _author.Delete(author);
                 return Ok("Author has been successfully deleted");
