@@ -23,189 +23,185 @@ namespace OnlineBookLibraryClient.Controllers.API
         private readonly IGenreRepository _genre;
 
         //Book Controller Constructor
-        //public BookController(IBookRepository bookRepository, IMapper mapper, IAuthorRepository author, IGenreRepository genre)
-        //{
-        //    _bookRepo = bookRepository;
-        //    _mapper = mapper;
-        //    _author = author;
-        //    _genre = genre;
-        //}
+        public BookController(IBookRepository bookRepository, IMapper mapper, IAuthorRepository author, IGenreRepository genre)
+        {
+            _bookRepo = bookRepository;
+            _mapper = mapper;
+            _author = author;
+            _genre = genre;
+        }
 
-        ///// <summary>
-        ///// Gets Paginated List of Books
-        ///// </summary>
-        //[HttpGet]
-        //public IActionResult GetBooks([FromQuery] PagingParameters model)
-        //{
-        //    try
-        //    {
-        //        var books = _bookRepo.GetBooks().ToList();
-        //        if (books.Count <= 0)
-        //        {
-        //            return NotFound("No Books in the Library");
-        //        }
+        /// <summary>
+        /// Gets Paginated List of Books
+        /// </summary>
+        [HttpGet]
+        public IActionResult GetBooks([FromQuery] PagingParameters model)
+        {
+            try
+            {
+                var books = _bookRepo.GetBooks().ToList();
+                if (books.Count <= 0)
+                {
+                    return NotFound("No Books in the Library");
+                }
 
-        //        //Pagination Details
-        //        var currentPage = model.PageNumber;
-        //        var pageSize = model.PageSize;
-        //        var items = books.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                //Pagination Details
+                var currentPage = model.PageNumber;
+                var pageSize = model.PageSize;
+                var items = books.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
 
-        //        var pagination = new
-        //        {
-        //            TotalCount = books.Count(),
-        //            PageSize = pageSize,
-        //            CurrentPage = currentPage,
-        //            TotalPages = (int)Math.Ceiling(books.Count() / (double)pageSize),
-        //            PreviousPage = model.PageNumber > 1 ? "Yes" : "No",
-        //            NextPage = model.PageNumber < books.Count() ? "Yes" : "No"
-        //        };
-        //        HttpContext.Response.Headers.Add("Pagination-Header", JsonConvert.SerializeObject(pagination));
-        //        if (items.Count == 0) return NotFound("No items to display");
-        //        return Ok(items);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Fatal Error");
-        //    }
-        //}
-        ///// <summary>
-        ///// Gets Paginated List according to Search Query
-        ///// </summary>
-        //[HttpGet("search")]
-        //public IActionResult SearchContacts([FromQuery] PagingParameters model)
-        //{
-        //    try
-        //    {
-        //        var books = _bookRepo.GetBooks().ToList();
-        //        if (books.Count <= 0)
-        //        {
-        //            return NotFound("No Books in this library");
-        //        }
-        //        //Check for valid search query
-        //        if (!string.IsNullOrEmpty(model.SearchQuery))
-        //        {
-        //            books = books.Where(x => x.ISBN.ToLower().Contains(model.SearchQuery.ToLower())
-        //            || x.Title.ToLower().Contains(model.SearchQuery.ToLower())).ToList();
+                var pagination = new
+                {
+                    TotalCount = books.Count(),
+                    PageSize = pageSize,
+                    CurrentPage = currentPage,
+                    TotalPages = (int)Math.Ceiling(books.Count() / (double)pageSize),
+                    PreviousPage = model.PageNumber > 1 ? "Yes" : "No",
+                    NextPage = model.PageNumber < books.Count() ? "Yes" : "No"
+                };
+                HttpContext.Response.Headers.Add("Pagination-Header", JsonConvert.SerializeObject(pagination));
+                if (items.Count == 0) return NotFound("No items to display");
+                return Ok(items);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Fatal Error");
+            }
+        }
+        /// <summary>
+        /// Gets Paginated List according to Search Query
+        /// </summary>
+        [HttpGet("search")]
+        public IActionResult SearchContacts([FromQuery] PagingParameters model)
+        {
+            try
+            {
+                var books = _bookRepo.GetBooks().ToList();
+                if (books.Count <= 0)
+                {
+                    return NotFound("No Books in this library");
+                }
+                //Check for valid search query
+                if (!string.IsNullOrEmpty(model.SearchQuery))
+                {
+                    books = books.Where(x => x.ISBN.ToLower().Contains(model.SearchQuery.ToLower())
+                    || x.Title.ToLower().Contains(model.SearchQuery.ToLower())).ToList();
 
-        //        }
+                }
 
-        //        //Pagination Details
-        //        var currentPage = model.PageNumber;
-        //        var pageSize = model.PageSize;
-        //        var items = books.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                //Pagination Details
+                var currentPage = model.PageNumber;
+                var pageSize = model.PageSize;
+                var items = books.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
 
-        //        var pagination = new
-        //        {
-        //            TotalCount = books.Count(),
-        //            PageSize = pageSize,
-        //            CurrentPage = currentPage,
-        //            TotalPages = (int)Math.Ceiling(books.Count() / (double)pageSize),
-        //            PreviousPage = model.PageNumber > 1 ? "Yes" : "No",
-        //            NextPage = model.PageNumber < books.Count() ? "Yes" : "No"
-        //        };
-        //        HttpContext.Response.Headers.Add("SearchPagination-Header", JsonConvert.SerializeObject(pagination));
-        //        if (items.Count == 0) return NotFound("No items to display");
-        //        return Ok(items);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
-        //    }
-        //}
+                var pagination = new
+                {
+                    TotalCount = books.Count(),
+                    PageSize = pageSize,
+                    CurrentPage = currentPage,
+                    TotalPages = (int)Math.Ceiling(books.Count() / (double)pageSize),
+                    PreviousPage = model.PageNumber > 1 ? "Yes" : "No",
+                    NextPage = model.PageNumber < books.Count() ? "Yes" : "No"
+                };
+                HttpContext.Response.Headers.Add("SearchPagination-Header", JsonConvert.SerializeObject(pagination));
+                if (items.Count == 0) return NotFound("No items to display");
+                return Ok(items);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
+            }
+        }
 
-        ///// <summary>
-        ///// Add new book
-        ///// </summary>
-        //[HttpPost]
-        //[Route("register")]
-        //public async Task<IActionResult> Post([FromBody] BookDetailsDTO bookToAdd)
-        //{
-        //    var bookExist = _bookRepo.GetBook(bookToAdd.ISBN);
-        //    if (bookExist != null) return BadRequest("Book Exist");
-        //    var genre = _genre.GetGenre(bookToAdd.GenreId);
-        //    if (genre == null) return NotFound("Genre Does not Exist");
+        /// <summary>
+        /// Add new book
+        /// </summary>
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Post([FromBody] BookDetailsDTO bookToAdd)
+        {
+            var bookExist = _bookRepo.GetBook(bookToAdd.ISBN);
+            if (bookExist != null) return BadRequest("Book Exist");
+            var genre = _genre.GetGenre(bookToAdd.Genre.GenreName);
+            if (genre == null) return NotFound("Genre Does not Exist");
 
-        //    genre.BookId = bookToAdd.GenreId;
-        //    await _genre.Update(genre);
+            await _genre.Update(genre);
 
-        //    var author = _author.GetAuthor(bookToAdd.AuthorId);
-        //    if (author == null) return NotFound("Author Does Not Exist");
-        //    author.BookId = bookToAdd.AuthorId;
-        //    await _author.Update(author);
+            var author = _author.GetAuthor(bookToAdd.AuthorId);
+            if (author == null) return NotFound("Author Does Not Exist");
+            await _author.Update(author);
 
-        //    var count = _bookRepo.GetBooks().Count();
-        //    //var book = _mapper.Map<Book>(bookToAdd);
-        //    var book = new Book
-        //    {
-        //        Title = bookToAdd.Title,
-        //        Id = bookToAdd.Id,
-        //        Description = bookToAdd.Description,
-        //        Language = bookToAdd.Language,
-        //        Photo = bookToAdd.Photo,
-        //        ISBN = bookToAdd.ISBN,
-        //        Pages = bookToAdd.Pages,
-        //        GenreId = bookToAdd.GenreId,
-        //        PublisherId = bookToAdd.PublisherId,
-        //        Rating = bookToAdd.Rating,
-        //    };
-        //    var res = await _bookRepo.Add(book);
+            var count = _bookRepo.GetBooks().Count();
+            //var book = _mapper.Map<Book>(bookToAdd);
+            var book = new Book
+            {
+                Title = bookToAdd.Title,
+                Id = bookToAdd.Id,
+                Description = bookToAdd.Description,
+                Language = bookToAdd.Language,
+                Photo = bookToAdd.Photo,
+                ISBN = bookToAdd.ISBN,
+                Pages = bookToAdd.Pages,
+                Rating = bookToAdd.Rating,
+            };
+            var res = await _bookRepo.Add(book);
 
-        //    //Check to see if Contact was Added
-        //    if (_bookRepo.GetBooks().Count() > count && res)
-        //    {
-        //        return Created($"api/Contact/{book.Id}", "Book Created Successfully");
-        //    }
+            //Check to see if Contact was Added
+            if (_bookRepo.GetBooks().Count() > count && res)
+            {
+                return Created($"api/Contact/{book.Id}", "Book Created Successfully");
+            }
 
-        //    return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
+            return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
 
 
-        //}
+        }
 
-        ///// <summary>
-        ///// Update Book Details
-        ///// </summary>
-        //[HttpPut("update/{isbn}")]
-        //public async Task<IActionResult> UpdateBook(string isbn, BookDetailsDTO bookToUpdate)
-        //{
-        //    try
-        //    {
-        //        var book = _bookRepo.GetBook(isbn);
-        //        if (book == null)
-        //        {
-        //            return NotFound($"Could not find book with isbn of {isbn}");
-        //        }
+        /// <summary>
+        /// Update Book Details
+        /// </summary>
+        [HttpPut("update/{isbn}")]
+        public async Task<IActionResult> UpdateBook(string isbn, BookDetailsDTO bookToUpdate)
+        {
+            try
+            {
+                var book = _bookRepo.GetBook(isbn);
+                if (book == null)
+                {
+                    return NotFound($"Could not find book with isbn of {isbn}");
+                }
 
-        //        book = _mapper.Map<Book>(bookToUpdate);
-        //        await _bookRepo.Update(book);
+                book = _mapper.Map<Book>(bookToUpdate);
+                await _bookRepo.Update(book);
 
-        //        return Ok(_mapper.Map<BookDetailsDTO>(book));
+                return Ok(_mapper.Map<BookDetailsDTO>(book));
 
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
-        //    }
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
+            }
 
-        //}
+        }
 
-        ///// <summary>
-        ///// Delete book by ISBN
-        ///// </summary>
-        //[HttpDelete("delete/{isbn}")]
-        //public async Task<IActionResult> Delete(string isbn)
-        //{
-        //    try
-        //    {
-        //        var book = _bookRepo.GetBook(isbn);
-        //        if (book == null) return NotFound("Contact Not Found");
-        //        await _bookRepo.Delete(book);
-        //        return Ok($"The Book with isbn: {isbn} has been removed");
+        /// <summary>
+        /// Delete book by ISBN
+        /// </summary>
+        [HttpDelete("delete/{isbn}")]
+        public async Task<IActionResult> Delete(string isbn)
+        {
+            try
+            {
+                var book = _bookRepo.GetBook(isbn);
+                if (book == null) return NotFound("Contact Not Found");
+                await _bookRepo.Delete(book);
+                return Ok($"The Book with isbn: {isbn} has been removed");
 
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
-        //    }
-        //}
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
+            }
+        }
     }
 }
