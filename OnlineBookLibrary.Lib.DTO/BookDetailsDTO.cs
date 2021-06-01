@@ -25,5 +25,6 @@ namespace OnlineBookLibrary.Lib.DTO
         public string AuthorId { get; set; }
         public int GenreId { get; set; }
         public int PublisherId { get; set; }
+
     }
 }
