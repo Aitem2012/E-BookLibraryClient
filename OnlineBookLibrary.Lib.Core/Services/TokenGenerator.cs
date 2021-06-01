@@ -15,18 +15,19 @@ namespace OnlineBookLibrary.Lib.Core.Services
 {
     public class TokenGenerator : ITokenGenerator
     {
-        private readonly JwtConfig _options;
+        private readonly JwtConfig _jwtConfig;
         private readonly UserManager<AppUser> _userManager;
-        public TokenGenerator(UserManager<AppUser> userManager, IOptionsMonitor<JwtConfig> options)
+        
+        public TokenGenerator(UserManager<AppUser> userManager, IOptionsMonitor<JwtConfig> optionsMonitor)
         {
             _userManager = userManager;
-            _options = options.CurrentValue;
+            _jwtConfig = optionsMonitor.CurrentValue;
         }
 
         public async Task<string> GenerateToken(AppUser user)
         {
             var JwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_options.Secret);
+            var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
             var roles = await _userManager.GetRolesAsync(user);
             var rolesClaims = new List<Claim>();
             for (int i = 0; i < roles.Count; i++)
