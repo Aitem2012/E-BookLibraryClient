@@ -52,5 +52,40 @@ namespace OnlineBookLibrary.Lib.Core.Services
             var JwtToken = JwtTokenHandler.WriteToken(Token);
             return JwtToken;
         }
+
+        public IEnumerable<Claim> GetTokenClaims(string token)
+        {
+            if (string.IsNullOrEmpty(token)){
+                throw new ArgumentException("Token is null or Empty");
+            }
+            TokenValidationParameters tokenValidation = GetTokenValidationParameters();
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                ClaimsPrincipal tokenValid = jwtSecurityTokenHandler.ValidateToken(token, tokenValidation, out SecurityToken validatedToken);
+
+                return tokenValid.Claims;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private SecurityKey GetSymmetricSecurityKey()
+        {
+            byte[] symmetricKey = Convert.FromBase64String(_jwtConfig.Secret);
+            return new SymmetricSecurityKey(symmetricKey);
+        }
+
+        private TokenValidationParameters GetTokenValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                IssuerSigningKey = GetSymmetricSecurityKey()
+            };
+        }
+        
     }
 }

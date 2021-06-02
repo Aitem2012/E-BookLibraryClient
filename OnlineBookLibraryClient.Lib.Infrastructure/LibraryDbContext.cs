@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineBookLibraryClient.Lib.Model;
 using System;
@@ -24,7 +25,7 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-           
+            this.SeedAdmin(builder);
 
             builder.Entity<Author>().HasData(
                                              new Author
@@ -64,6 +65,44 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure
                 new Book { Id = 3, AuthorId = 1, Title = "Othello", GenreId = 2, PublisherId = 1, ISBN = "898327893484", Language="Chinese" }
             );
 
+        }
+
+        private void SeedAdmin(ModelBuilder builder)
+        {
+            //Create Roles
+            List<IdentityRole> roles = new List<IdentityRole>()
+            {
+                new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+            };
+
+            builder.Entity<IdentityRole>().HasData(roles);
+
+            // Seed Users
+            var passwordHasher = new PasswordHasher<AppUser>();
+
+            var user = new AppUser
+            {
+                    FirstName = "Ayobami",
+                    LastName = "Fadeni",
+                    UserName = "admin@gmail.com",
+                    NormalizedUserName = "ADMIN@GMAIL.COM",
+                    Email = "admin@gmail.com",
+                    NormalizedEmail = "ADMIN@GMAIL.COM",
+                    SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            builder.Entity<AppUser>().HasData(user);
+
+            // Seed UserRoles
+            IdentityUserRole<string> userRole = new IdentityUserRole<string> 
+            {
+                UserId = user.Id,
+                RoleId = roles.First(q => q.Name == "Admin").Id
+            };
+
+            user.PasswordHash = passwordHasher.HashPassword(user, "admin123");
+            
+            builder.Entity<IdentityUserRole<string>>().HasData(userRole);
         }
 
     }
