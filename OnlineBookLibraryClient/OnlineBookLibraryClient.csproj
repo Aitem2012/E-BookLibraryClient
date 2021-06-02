@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\MVCController\**" />
+    <Content Remove="Controllers\MVCController\**" />
+    <EmbeddedResource Remove="Controllers\MVCController\**" />
+    <None Remove="Controllers\MVCController\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -15,10 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\OnlineBookLibrary.Lib.DTO\OnlineBookLibrary.Lib.DTO.csproj" />
     <ProjectReference Include="..\OnlineBookLibraryClient.Lib.Infrastructure\OnlineBookLibraryClient.Lib.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\MVCController\" />
   </ItemGroup>
 
 </Project>
