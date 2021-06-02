@@ -34,7 +34,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
         }
 
         
-        public async Task<string> AddPatchPhoto([FromForm] PhotoUpdateDTO photoUpdateDto)
+        public async Task<string> AddPatchPhoto(PhotoUpdateDTO photoUpdateDto)
         {   
             var file = photoUpdateDto.PhotoUrl;
             if (file.Length <= 0) return ("Invalid File Size");

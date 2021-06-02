@@ -42,8 +42,12 @@ namespace OnlineBookLibrary.Lib.Core.Services
         }
         public async Task<Book> CreateBook(BookDetailsDTO model)
         {
+            PhotoUpdateDTO photoToAdd = new PhotoUpdateDTO
+            {
+                PhotoUrl = model.Photo
+            };
             
-            var photo = await _cloudinary.AddPatchPhoto(new PhotoUpdateDTO { PhotoUrl = model.Photo});
+            var photo = await _cloudinary.AddPatchPhoto(photoToAdd);
             return new Book
             {
                 Title = model.Title,
@@ -56,8 +60,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 DateAddedToLibrary = model.DateAddedToLibrary,
                 AuthorId = model.Author.Id,
                 Pages = model.Pages,
-                Description = model.Description,
-                
+                Description = model.Description,                
             };
         }
 
@@ -108,6 +111,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
 
             foreach (var item in books)
             {
+                //item.               
                 var bookGenre = _genreRepo.GetGenre(item.GenreId);
                 var publisher = _publisher.GetPublisher(item.PublisherId);
                 var author = _authorRepo.GetAuthor(item.AuthorId);

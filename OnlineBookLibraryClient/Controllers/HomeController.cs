@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using OnlineBookLibrary.Lib.DTO.BookResponse;
 using OnlineBookLibraryClient.Models;
+using OnlineBookLibraryClient.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace OnlineBookLibraryClient.Controllers
@@ -18,9 +22,30 @@ namespace OnlineBookLibraryClient.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var url = "http://localhost:39523/api/book/all-books/";
+            HttpClient client = new HttpClient();
+            var userResponse = await client.GetAsync(url);
+            var output = new List<BookResponseViewModel>();
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var responseDto = JsonConvert.DeserializeObject<IEnumerable<BookResponseDTO>>(content);
+            foreach(var item in responseDto)
+            {
+                var obj = new BookResponseViewModel()
+                {
+                    Title = item.Title,
+                    GenreName = item.GenreName,
+                    
+                    Rating = item.Rating,
+                    AuthorsFirstName = item.AuthorName,
+                    
+                    Description = item.Description
+                };
+                output.Add(obj);
+            }
+            
+            return View(output);
         }
 
         public IActionResult Privacy()

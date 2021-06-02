@@ -120,7 +120,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         /// </summary>
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Post([FromBody] BookDetailsDTO bookToAdd)
+        public async Task<IActionResult> Post( BookDetailsDTO bookToAdd)
         {
             
             //var count = _bookRepo.GetBooks().Count();
