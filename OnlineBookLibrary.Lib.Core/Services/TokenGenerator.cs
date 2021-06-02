@@ -73,7 +73,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
         }
         private SecurityKey GetSymmetricSecurityKey()
         {
-            byte[] symmetricKey = Convert.FromBase64String(_jwtConfig.Secret);
+            byte[] symmetricKey = Encoding.ASCII.GetBytes(_jwtConfig.Secret); // Convert.FromBase64String(_jwtConfig.Secret);
             return new SymmetricSecurityKey(symmetricKey);
         }
 

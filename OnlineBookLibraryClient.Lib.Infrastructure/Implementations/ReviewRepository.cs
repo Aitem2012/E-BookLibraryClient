@@ -32,9 +32,9 @@ namespace OnlineBookLibraryClient.Lib.Infrastructure.Implementations
             return false;
         }
 
-        public IQueryable<Review> GetReviewsByUser(int id)
+        public IQueryable<Review> GetReviewsByBookId(int id)
         {
-            return _ctx.Reviews.Include(x => x.AppUser).Where(x => x.Id == id).Select(x => x);
+            return _ctx.Reviews.Where(x => x.Book.Id == id).Select(x => x);
         }
 
         public Review GetReview(int id)

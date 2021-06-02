@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using OnlineBookLibrary.Lib.Core;
+using OnlineBookLibrary.Lib.Core.Interfaces;
 using OnlineBookLibrary.Lib.Core.Services;
 using OnlineBookLibrary.Lib.DTO;
 using OnlineBookLibraryClient.Lib.Infrastructure;
@@ -25,10 +26,14 @@ namespace OnlineBookLibraryClient.Controllers.API
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IOptionsMonitor<JwtConfig> _options;
+        private TokenGenerator tokenGen; 
+        private readonly ICloudinaryService _cloudinaryService;
+
 
         public UserController(LibraryDbContext context, UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signManager, RoleManager<IdentityRole> roleManager,
-                                IMapper mapper, IOptionsMonitor<JwtConfig> options)
+                                IMapper mapper, IOptionsMonitor<JwtConfig> options,
+                                ICloudinaryService cloudinaryService)
         {
             _context = context;
             _userManager = userManager;
@@ -36,6 +41,8 @@ namespace OnlineBookLibraryClient.Controllers.API
             _roleManager = roleManager;
             _mapper = mapper;
             _options = options;
+            tokenGen = new TokenGenerator(_userManager, _options);
+            _cloudinaryService = cloudinaryService;
         }
 
         [HttpGet]
@@ -52,7 +59,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             //Creating New User
-            var userExist = _userManager.FindByEmailAsync(model.Email);
+            var userExist = await _userManager.FindByEmailAsync(model.Email);
             if (userExist != null) return BadRequest("Email Exist");
             var user = new AppUser
             {
@@ -92,14 +99,35 @@ namespace OnlineBookLibraryClient.Controllers.API
                 return BadRequest("something went wrong");
             }
 
-            var tokenGen = new TokenGenerator(_userManager, _options);
+            
             var token = await tokenGen.GenerateToken(user);
             if (token == null)
             {
                 return BadRequest();
             }
 
-            return Ok(new { Id = user.Id, JwtToken = token});
+            return Ok(GetUserRole(token));
+        }
+
+        public IActionResult GetUserRole(string token)
+        {
+            var claims = tokenGen.GetTokenClaims(token);
+
+            // List<string> admin = new List<string>();
+            string role = "";
+
+            foreach (var c in claims)
+            {
+                //admin.Add(c.Type + ":" + c.Value);
+                if (c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                    role = c.Value;
+            }
+
+            //var admin = claims.Where(x => x.Type.Contains("roles"));
+
+            // var admin = HttpContext.User.HasClaim(c => c.Type == "roles");
+
+            return Ok(new { role });
         }
 
         [HttpGet]
@@ -140,6 +168,21 @@ namespace OnlineBookLibraryClient.Controllers.API
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong");
             }
+        }
+
+        [HttpPatch]
+        [Route("updatephoto/{id}")]
+        public async Task<IActionResult> UpdatePhoto(string id, [FromForm] PhotoUpdateDTO photoUpdate)
+        {
+            var userToUpdate = await _userManager.FindByIdAsync(id);
+            if (userToUpdate == null) return NotFound($"Could not find book with ISBN of {id}");
+            userToUpdate.Photo = await _cloudinaryService.AddPatchPhoto(photoUpdate);
+            var photoIsUpdated = await _userManager.UpdateAsync(userToUpdate);
+            if (!photoIsUpdated.Succeeded)
+            {
+                return StatusCode(500, "Something went wrong, try again");
+            }
+            return Ok($"Photo Path Successfully Updated");
         }
 
         [HttpDelete]

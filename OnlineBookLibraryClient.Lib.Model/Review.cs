@@ -12,6 +12,7 @@ namespace OnlineBookLibraryClient.Lib.Model
         public string ReviewHeader { get; set; }
         public AppUser AppUser { get; set; }
         public Book Book { get; set; }
+        public int Ratings { get; set; }
 
     }
 }
