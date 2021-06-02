@@ -34,7 +34,8 @@ namespace OnlineBookLibraryClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling 
+             = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();

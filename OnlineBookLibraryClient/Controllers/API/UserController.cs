@@ -25,6 +25,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IOptionsMonitor<JwtConfig> _options;
+        private TokenGenerator tokenGen; 
 
         public UserController(LibraryDbContext context, UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signManager, RoleManager<IdentityRole> roleManager,
@@ -36,6 +37,7 @@ namespace OnlineBookLibraryClient.Controllers.API
             _roleManager = roleManager;
             _mapper = mapper;
             _options = options;
+            tokenGen = new TokenGenerator(_userManager, _options);
         }
 
         [HttpGet]
@@ -52,7 +54,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             //Creating New User
-            var userExist = _userManager.FindByEmailAsync(model.Email);
+            var userExist = await _userManager.FindByEmailAsync(model.Email);
             if (userExist != null) return BadRequest("Email Exist");
             var user = new AppUser
             {
@@ -92,14 +94,35 @@ namespace OnlineBookLibraryClient.Controllers.API
                 return BadRequest("something went wrong");
             }
 
-            var tokenGen = new TokenGenerator(_userManager, _options);
+            
             var token = await tokenGen.GenerateToken(user);
             if (token == null)
             {
                 return BadRequest();
             }
 
-            return Ok(new { Id = user.Id, JwtToken = token});
+            return Ok(GetUserRole(token));
+        }
+
+        public IActionResult GetUserRole(string token)
+        {
+            var claims = tokenGen.GetTokenClaims(token);
+
+            // List<string> admin = new List<string>();
+            string role = "";
+
+            foreach (var c in claims)
+            {
+                //admin.Add(c.Type + ":" + c.Value);
+                if (c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                    role = c.Value;
+            }
+
+            //var admin = claims.Where(x => x.Type.Contains("roles"));
+
+            // var admin = HttpContext.User.HasClaim(c => c.Type == "roles");
+
+            return Ok(new { role });
         }
 
         [HttpGet]
