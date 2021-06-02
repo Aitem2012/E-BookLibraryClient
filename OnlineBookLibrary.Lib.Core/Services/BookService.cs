@@ -23,11 +23,11 @@ namespace OnlineBookLibrary.Lib.Core.Services
         private readonly IPublisherRepository _publisherRepo;
         private readonly IPublisherService _publisherService;
         private readonly IAuthorService _authorService;
-        
+        private readonly ICloudinaryService _cloudinary;
 
         public BookService(IBookRepository book, IAuthorRepository author, IGenreRepository genre, IPublisherRepository publisher,
             IGenreService genreService, IPublisherRepository publisherRepository, IPublisherService publisherService,
-            IAuthorService authorService)
+            IAuthorService authorService, ICloudinaryService cloudinary)
         {
             _bookRepo = book;
             _authorRepo = author;
@@ -37,17 +37,19 @@ namespace OnlineBookLibrary.Lib.Core.Services
             _publisherRepo = publisherRepository;
             _publisherService = publisherService;
             _authorService = authorService;
+            _cloudinary = cloudinary;
            
         }
-        public Book CreateBook(BookDetailsDTO model)
+        public async Task<Book> CreateBook(BookDetailsDTO model)
         {
-
+            
+            var photo = await _cloudinary.AddPatchPhoto(new PhotoUpdateDTO { PhotoUrl = model.Photo});
             return new Book
             {
                 Title = model.Title,
                 GenreId = model.Genre.Id,
                 Language = model.Language,
-                Photo = model.Photo,
+                Photo = photo,
                 PublisherId = model.Publisher.Id,
                 PublicationDate = model.PublicationDate,
                 ISBN = model.ISBN,
@@ -55,7 +57,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 AuthorId = model.Author.Id,
                 Pages = model.Pages,
                 Description = model.Description,
-                Rating = model.Rating
+                
             };
         }
 
@@ -85,7 +87,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
                     Pages = item.Pages,
                     GenreName = bookGenre.GenreName,
                     Description = item.Description,
-                    Rating = item.Rating,
+                    
                     PublisherName = publisher.PublisherName
                 });
             }
@@ -119,7 +121,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
                     Pages = item.Pages,
                     GenreName = bookGenre.GenreName,
                     Description = item.Description,
-                    Rating = item.Rating,
+                    
                     PublisherName = publisher.PublisherName
                 });
             }
@@ -149,7 +151,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 GenreName = genre.GenreName,
                 Language = book.Language,
                 Pages = book.Pages,
-                Rating = book.Rating,
+                
                 AuthorName = $"{author.FirstName} {author.LastName}"
             }
             ;
@@ -210,7 +212,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
 
 
 
-            var book = CreateBook(model);
+            var book = await CreateBook(model);
 
 
             return book;
@@ -240,7 +242,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 GenreName = genre.GenreName,
                 Language = book.Language,
                 Pages = book.Pages,
-                Rating = book.Rating,
+                
                 AuthorName = $"{author.FirstName} {author.LastName}"
             }
             ;
