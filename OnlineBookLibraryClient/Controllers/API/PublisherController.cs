@@ -15,10 +15,12 @@ namespace OnlineBookLibraryClient.Controllers.API
     public class PublisherController : ControllerBase
     {
         private readonly IPublisherRepository _publisher;
+        private readonly IPublisherService _publisherService;
 
-        public PublisherController(IPublisherRepository publisher)
+        public PublisherController(IPublisherRepository publisher, IPublisherService publisherService)
         {
             _publisher = publisher;
+            _publisherService = publisherService;
         }
 
         [HttpPost]
@@ -26,18 +28,18 @@ namespace OnlineBookLibraryClient.Controllers.API
 
         public async Task<IActionResult> Post([FromBody] PublisherRegisterDTO model)
         {
-            var publisherExist = _publisher.GetPublisher(model.Id);
-            if (publisherExist != null)
+            
+            var pub = _publisherService.GetPublisherByName(model.PublisherName);
+            if (pub != null)
             {
                 return BadRequest("Publisher Exist");
             }
 
-            var genre = new Publisher
-            {
-                PublisherName = model.PublisherName
-            };
-            var genreIsAdded = await _publisher.Add(genre);
-            if (!genreIsAdded)
+            var publisherExist = _publisherService.CreatePublisher(model);
+
+            
+            var publisherIsAdded = await _publisherService.Add(publisherExist);
+            if (!publisherIsAdded)
             {
                 return StatusCode(500, "Publisher could not be added");
             }

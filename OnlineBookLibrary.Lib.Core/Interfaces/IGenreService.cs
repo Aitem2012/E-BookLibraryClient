@@ -11,5 +11,6 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
     public interface IGenreService
     {
         public Genre CreateGenre(GenreRegisterDTO model);
+        public Genre GetGenreByName(string genreName);
     }
 }
