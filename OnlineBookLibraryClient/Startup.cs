@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookLibrary.Lib.Core;
 using OnlineBookLibrary.Lib.Core.Interfaces;
+using OnlineBookLibrary.Lib.Core.Services;
 using OnlineBookLibraryClient.Lib.Infrastructure;
 using OnlineBookLibraryClient.Lib.Infrastructure.Implementations;
 using OnlineBookLibraryClient.Lib.Model;
@@ -34,6 +35,7 @@ namespace OnlineBookLibraryClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
