@@ -31,7 +31,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         public UserController(LibraryDbContext context, UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signManager, RoleManager<IdentityRole> roleManager,
                                 IMapper mapper, IOptionsMonitor<JwtConfig> options,
-                                CloudinaryService cloudinaryService)
+                                ICloudinaryService cloudinaryService)
         {
             _context = context;
             _userManager = userManager;
@@ -42,11 +42,22 @@ namespace OnlineBookLibraryClient.Controllers.API
             _cloudinaryService = cloudinaryService;
         }
 
+        [HttpGet]
+        [Route("get-user-by-id/{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound("user not found");
+
+            return Ok(user);
+        }
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             //Creating New User
+            var userExist = await _userManager.FindByEmailAsync(model.Email);
+            if (userExist != null) return BadRequest("Email Exist");
             var user = new AppUser
             {
                 FirstName = model.FirstName,
@@ -92,10 +103,24 @@ namespace OnlineBookLibraryClient.Controllers.API
                 return BadRequest();
             }
 
-            return Ok(token);
+            return Ok(new { Id = user.Id, JwtToken = token});
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                var users = _userManager.Users.ToList();
+                if (users.Count() <= 0) return NotFound("No User Registered");
+                return Ok(users);
+            }
+            catch (Exception)
+            {
 
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong");
+            }
+        }
 
         [HttpPatch]
         [Route("update/{id}")]

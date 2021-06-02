@@ -40,6 +40,12 @@ namespace OnlineBookLibraryClient
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IPublisherRepository, PublisherRepository>();
+
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IAuthorService, AuthorServices>();
+            services.AddTransient<IPublisherService, PublisherService>();
+
             services.AddDbContextPool<LibraryDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("Default")));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<LibraryDbContext>();
@@ -55,6 +61,7 @@ namespace OnlineBookLibraryClient
                 }
                 );
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+            
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -1,6 +1,9 @@
 ﻿using OnlineBookLibrary.Lib.Core.Interfaces;
 using OnlineBookLibrary.Lib.DTO;
+using OnlineBookLibrary.Lib.DTO.AuthorRegister;
 using OnlineBookLibrary.Lib.DTO.BookResponse;
+using OnlineBookLibrary.Lib.DTO.GenreRequest;
+using OnlineBookLibrary.Lib.DTO.PublisherRegister;
 using OnlineBookLibraryClient.Lib.Model;
 using System;
 using System.Collections.Generic;
@@ -16,13 +19,25 @@ namespace OnlineBookLibrary.Lib.Core.Services
         private readonly IAuthorRepository _authorRepo;
         private readonly IGenreRepository _genreRepo;
         private readonly IPublisherRepository _publisher;
+        private readonly IGenreService _genreService;
+        private readonly IPublisherRepository _publisherRepo;
+        private readonly IPublisherService _publisherService;
+        private readonly IAuthorService _authorService;
+        
 
-        public BookService(IBookRepository book, IAuthorRepository author, IGenreRepository genre, IPublisherRepository publisher)
+        public BookService(IBookRepository book, IAuthorRepository author, IGenreRepository genre, IPublisherRepository publisher,
+            IGenreService genreService, IPublisherRepository publisherRepository, IPublisherService publisherService,
+            IAuthorService authorService)
         {
             _bookRepo = book;
             _authorRepo = author;
             _genreRepo = genre;
             _publisher = publisher;
+            _genreService = genreService;
+            _publisherRepo = publisherRepository;
+            _publisherService = publisherService;
+            _authorService = authorService;
+           
         }
         public Book CreateBook(BookDetailsDTO model)
         {
@@ -137,6 +152,106 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 AuthorName = $"{author.FirstName} {author.LastName}"
             }
             ;
+        }
+
+        public async Task<Book> RegisterBook (BookDetailsDTO model)
+        {
+
+            var bookExist = _bookRepo.GetBook(model.ISBN);
+            if (bookExist != null) return null;
+
+            var genreExist = _genreService.GetGenreByName(model.Genre.GenreName);
+
+            var myGenre = new GenreRegisterDTO
+            {
+                GenreName = model.Genre.GenreName
+            };
+
+
+
+            if (genreExist == null)
+            {
+                genreExist = _genreService.CreateGenre(myGenre);
+                if (!await _genreRepo.Add(genreExist)) throw new InvalidOperationException("Genre Could not be created");
+
+            }
+
+            var publisherExist = _publisherService.GetPublisherByName(model.Publisher.PublisherName);
+
+            var myPublisher = new PublisherRegisterDTO
+            {
+                PublisherName = model.Publisher.PublisherName
+            };
+
+            if (publisherExist == null)
+            {
+                publisherExist = _publisherService.CreatePublisher(myPublisher);
+                if (!await _publisherRepo.Add(publisherExist)) throw new InvalidOperationException("Publisher Could not be Created");
+            }
+
+            var authorExist = _authorService.GetAuthorByName(model.Author.FirstName, model.Author.LastName);
+
+            var myAuthor = new AuthorRegisterDTO
+            {
+                FirstName = model.Author.FirstName,
+                LastName = model.Author.LastName
+            };
+
+            if (authorExist == null)
+            {
+                authorExist = _authorService.CreateAuthor(myAuthor);
+                if (!await _authorRepo.Add(authorExist)) throw new InvalidOperationException("Author Could not be created");
+            }
+
+            model.Genre = genreExist;
+            model.Author = authorExist;
+            model.Publisher = publisherExist;
+
+
+
+            var book = CreateBook(model);
+
+
+            return book;
+        }
+
+        public BookResponseDTO GetBookByTitle(string title)
+        {
+            var books = _bookRepo.GetBooks();
+
+            var book = books.FirstOrDefault(x => x.Title == title);
+            
+            if (book == null)
+            {
+                return null;
+            }
+            var author = _authorRepo.GetAuthor(book.AuthorId);
+            var publisher = _publisher.GetPublisher(book.PublisherId);
+            var genre = _genreRepo.GetGenre(book.GenreId);
+
+
+
+            return new BookResponseDTO
+            {
+                Title = book.Title,
+                ISBN = book.ISBN,
+                PublisherName = publisher.PublisherName,
+                GenreName = genre.GenreName,
+                Language = book.Language,
+                Pages = book.Pages,
+                Rating = book.Rating,
+                AuthorName = $"{author.FirstName} {author.LastName}"
+            }
+            ;
+        }
+
+        public async Task<bool> Add(Book book)
+        {
+            if (!await _bookRepo.Add(book))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

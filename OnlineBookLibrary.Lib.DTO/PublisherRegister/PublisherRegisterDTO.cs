@@ -11,6 +11,6 @@ namespace OnlineBookLibrary.Lib.DTO.PublisherRegister
     {
         public int Id { get; set; }
         public string PublisherName { get; set; }
-        public IEnumerable<Book> Books { get; set; }
+        
     }
 }

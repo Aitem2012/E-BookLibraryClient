@@ -11,6 +11,12 @@ namespace OnlineBookLibrary.Lib.Core.Services
 {
     public class GenreService : IGenreService
     {
+        private readonly IGenreRepository _genre;
+
+        public GenreService(IGenreRepository genre)
+        {
+            _genre = genre;
+        }
         public Genre CreateGenre(GenreRegisterDTO model)
         {
             return new Genre
@@ -18,6 +24,12 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 GenreName = model.GenreName,
                 Books = model.Books
             };
+        }
+
+        public Genre GetGenreByName(string genreName)
+        {
+            var genres = _genre.GetGenres();
+            return genres.FirstOrDefault(x => x.GenreName == genreName);
         }
     }
 }
