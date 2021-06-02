@@ -15,5 +15,8 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
         public IEnumerable<BookResponseDTO> GetBooksByAuthor(int id);
         public BookResponseDTO GetBookByISBN(string isbn);
         public IEnumerable<BookResponseDTO> GetAllBooks();
+        public BookResponseDTO GetBookByTitle(string title);
+        Task<Book> RegisterBook(BookDetailsDTO model);
+        Task<bool> Add(Book book);
     }
 }

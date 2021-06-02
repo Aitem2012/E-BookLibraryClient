@@ -43,6 +43,8 @@ namespace OnlineBookLibraryClient.Controllers.API
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             //Creating New User
+            var userExist = _userManager.FindByEmailAsync(model.Email);
+            if (userExist != null) return BadRequest("Email Exist");
             var user = new AppUser
             {
                 FirstName = model.FirstName,
