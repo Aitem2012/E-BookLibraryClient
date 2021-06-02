@@ -71,6 +71,8 @@ namespace OnlineBookLibraryClient
                     RequireExpirationTime = false
                 };
             });
+
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +89,8 @@ namespace OnlineBookLibraryClient
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 
