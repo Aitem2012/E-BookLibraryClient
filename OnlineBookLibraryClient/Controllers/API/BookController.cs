@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OnlineBookLibrary.Lib.Core.Interfaces;
+using OnlineBookLibrary.Lib.Core.Services;
 using OnlineBookLibrary.Lib.DTO;
 using OnlineBookLibrary.Lib.DTO.Pagination;
 using OnlineBookLibraryClient.Lib.Model;
@@ -19,16 +20,16 @@ namespace OnlineBookLibraryClient.Controllers.API
     {
         private readonly IBookRepository _bookRepo;
         private readonly IMapper _mapper;
-        
+        private readonly ICloudinaryService _cloudinaryService;
         private readonly IBookService _bookService;
 
         //Book Controller Constructor
-        public BookController(IBookRepository bookRepository, IMapper mapper, IAuthorService authorService, IBookService bookService
-            )
+        public BookController(IBookRepository bookRepository, IMapper mapper, IAuthorService authorService, IBookService bookService,
+            ICloudinaryService cloudinaryService)
         {
             _bookRepo = bookRepository;
             _mapper = mapper;
-           
+            _cloudinaryService = cloudinaryService;
             _bookService = bookService;
         }
 
@@ -167,6 +168,27 @@ namespace OnlineBookLibraryClient.Controllers.API
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
             }
 
+        }
+
+        /// <summary>
+        /// Update photo by ISBN
+        /// </summary>
+        /// <param name="isbn"></param>
+        /// <param name="photoUpdate"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Route("updatephoto/{isbn}")]
+        public async Task<IActionResult> UpdatePhoto(string isbn, [FromForm] PhotoUpdateDTO photoUpdate)
+        {
+            var bookToUpdate = _bookRepo.GetBook(isbn);
+            if (bookToUpdate == null) return NotFound($"Could not find book with ISBN of {isbn}");
+            bookToUpdate.Photo = await _cloudinaryService.AddPatchPhoto(photoUpdate);
+            var photoIsUpdated = await _bookRepo.Update(bookToUpdate);
+            if (!photoIsUpdated)
+            {
+                return StatusCode(500, "Something went wrong, try again");
+            }
+            return Ok($"Photo Path Successfully Updated");
         }
 
         /// <summary>
