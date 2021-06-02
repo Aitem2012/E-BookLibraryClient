@@ -22,9 +22,9 @@ namespace OnlineBookLibraryClient.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Book(BookViewModel model)
+        public async Task<IActionResult> Book([FromForm]BookViewModel model)
         {
-            var url = "http://localhost:39523/api/book/register";
+            var url = "http://localhost:39523/api/book/register/";
             HttpClient client = new HttpClient();
             BookDetailsDTO book = new BookDetailsDTO
             {
@@ -33,7 +33,7 @@ namespace OnlineBookLibraryClient.Controllers
                 {
                     GenreName = model.GenreName,
                 },
-                //book.Photo = model.Photo;
+                Photo = model.Photo,
                 ISBN = model.ISBN,
                 Language = model.Language,
                 Publisher = new Publisher
