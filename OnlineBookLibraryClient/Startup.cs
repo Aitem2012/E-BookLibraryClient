@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookLibrary.Lib.Core;
 using OnlineBookLibrary.Lib.Core.Interfaces;
+using OnlineBookLibrary.Lib.Core.Services;
 using OnlineBookLibraryClient.Lib.Infrastructure;
 using OnlineBookLibraryClient.Lib.Infrastructure.Implementations;
 using OnlineBookLibraryClient.Lib.Model;
@@ -38,6 +39,12 @@ namespace OnlineBookLibraryClient
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IPublisherRepository, PublisherRepository>();
+
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IAuthorService, AuthorServices>();
+            services.AddTransient<IPublisherService, PublisherService>();
+
             services.AddDbContextPool<LibraryDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("Default")));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<LibraryDbContext>();
@@ -53,6 +60,7 @@ namespace OnlineBookLibraryClient
                 }
                 );
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+            
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

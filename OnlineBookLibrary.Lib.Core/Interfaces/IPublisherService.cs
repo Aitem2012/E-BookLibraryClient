@@ -12,5 +12,7 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
     public interface IPublisherService
     {
         public Publisher CreatePublisher(PublisherRegisterDTO model);
+        public Publisher GetPublisherByName(string publisherName);
+        Task<bool> Add(Publisher model);
     }
 }

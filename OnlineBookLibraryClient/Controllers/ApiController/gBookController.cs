@@ -15,7 +15,7 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookController : ControllerBase
+    public class gBookController : ControllerBase
     {
         private readonly IBookRepository _bookRepo;
         private readonly IAuthorRepository _authorRepo;
@@ -26,7 +26,7 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
         private readonly IPublisherService _publisherService;
         private readonly IAuthorService _authorService;
 
-        public BookController(IBookRepository bookRepository, IAuthorRepository author,
+        public gBookController(IBookRepository bookRepository, IAuthorRepository author,
             IGenreRepository genre, IPublisherRepository publisher, IBookService bookService, IAuthorService authorService,
             IGenreService genreService, IPublisherService publisherService)
         {
