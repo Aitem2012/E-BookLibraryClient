@@ -106,6 +106,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
 
             foreach (var item in books)
             {
+                //item.               
                 var bookGenre = _genreRepo.GetGenre(item.GenreId);
                 var publisher = _publisher.GetPublisher(item.PublisherId);
                 var author = _authorRepo.GetAuthor(item.AuthorId);
