@@ -35,6 +35,7 @@ namespace OnlineBookLibraryClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using OnlineBookLibrary.Lib.Core;
+using OnlineBookLibrary.Lib.Core.Interfaces;
 using OnlineBookLibrary.Lib.Core.Services;
 using OnlineBookLibrary.Lib.DTO;
 using OnlineBookLibraryClient.Lib.Infrastructure;
@@ -25,10 +26,12 @@ namespace OnlineBookLibraryClient.Controllers.API
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IOptionsMonitor<JwtConfig> _options;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public UserController(LibraryDbContext context, UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signManager, RoleManager<IdentityRole> roleManager,
-                                IMapper mapper, IOptionsMonitor<JwtConfig> options)
+                                IMapper mapper, IOptionsMonitor<JwtConfig> options,
+                                ICloudinaryService cloudinaryService)
         {
             _context = context;
             _userManager = userManager;
@@ -36,6 +39,7 @@ namespace OnlineBookLibraryClient.Controllers.API
             _roleManager = roleManager;
             _mapper = mapper;
             _options = options;
+            _cloudinaryService = cloudinaryService;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             //Creating New User
-            var userExist = _userManager.FindByEmailAsync(model.Email);
+            var userExist = await _userManager.FindByEmailAsync(model.Email);
             if (userExist != null) return BadRequest("Email Exist");
             var user = new AppUser
             {
@@ -140,6 +144,21 @@ namespace OnlineBookLibraryClient.Controllers.API
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong");
             }
+        }
+
+        [HttpPatch]
+        [Route("updatephoto/{id}")]
+        public async Task<IActionResult> UpdatePhoto(string id, [FromForm] PhotoUpdateDTO photoUpdate)
+        {
+            var userToUpdate = await _userManager.FindByIdAsync(id);
+            if (userToUpdate == null) return NotFound($"Could not find book with ISBN of {id}");
+            userToUpdate.Photo = await _cloudinaryService.AddPatchPhoto(photoUpdate);
+            var photoIsUpdated = await _userManager.UpdateAsync(userToUpdate);
+            if (!photoIsUpdated.Succeeded)
+            {
+                return StatusCode(500, "Something went wrong, try again");
+            }
+            return Ok($"Photo Path Successfully Updated");
         }
 
         [HttpDelete]
