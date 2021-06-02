@@ -19,16 +19,17 @@ namespace OnlineBookLibraryClient.Controllers.API
     {
         private readonly IBookRepository _bookRepo;
         private readonly IMapper _mapper;
-        private readonly IAuthorRepository _author;
-        private readonly IGenreRepository _genre;
+        
+        private readonly IBookService _bookService;
 
         //Book Controller Constructor
-        public BookController(IBookRepository bookRepository, IMapper mapper, IAuthorRepository author, IGenreRepository genre)
+        public BookController(IBookRepository bookRepository, IMapper mapper, IAuthorService authorService, IBookService bookService
+            )
         {
             _bookRepo = bookRepository;
             _mapper = mapper;
-            _author = author;
-            _genre = genre;
+           
+            _bookService = bookService;
         }
 
         /// <summary>
@@ -120,36 +121,20 @@ namespace OnlineBookLibraryClient.Controllers.API
         [Route("register")]
         public async Task<IActionResult> Post([FromBody] BookDetailsDTO bookToAdd)
         {
-            var bookExist = _bookRepo.GetBook(bookToAdd.ISBN);
-            if (bookExist != null) return BadRequest("Book Exist");
-            var genre = _genre.GetGenre(bookToAdd.GenreId);
-            if (genre == null) return NotFound("Genre Does not Exist");
-
-            await _genre.Update(genre);
-
-            var author = _author.GetAuthor(bookToAdd.Author.Id);
-            if (author == null) return NotFound("Author Does Not Exist");
-            await _author.Update(author);
-
-            var count = _bookRepo.GetBooks().Count();
-            //var book = _mapper.Map<Book>(bookToAdd);
-            var book = new Book
+            
+            //var count = _bookRepo.GetBooks().Count();
+            //var book = _bookService.CreateBook(bookToAdd);
+            var res = await _bookService.RegisterBook(bookToAdd);
+            if (res == null)
             {
-                Title = bookToAdd.Title,
-                Id = bookToAdd.Id,
-                Description = bookToAdd.Description,
-                Language = bookToAdd.Language,
-                Photo = bookToAdd.Photo,
-                ISBN = bookToAdd.ISBN,
-                Pages = bookToAdd.Pages,
-                Rating = bookToAdd.Rating,
-            };
-            var res = await _bookRepo.Add(book);
+                return BadRequest("Book ISBN Exist");
+            }
+            var bookSuccessfullyAdded = await _bookService.Add(res);
 
             //Check to see if Contact was Added
-            if (_bookRepo.GetBooks().Count() > count && res)
+            if (bookSuccessfullyAdded)
             {
-                return Created($"api/Contact/{book.Id}", "Book Created Successfully");
+                return Created($"api/Contact/{res.Id}", "Book Created Successfully");
             }
 
             return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
@@ -202,6 +187,36 @@ namespace OnlineBookLibraryClient.Controllers.API
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong!!");
             }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult Get(int id)
+        {
+
+            var books = _bookService.GetBooksByAuthor(id).ToList();
+            if (books == null) return NotFound("No Such Author");
+            if (books.Count <= 0) return BadRequest("Author Does Not have Any book");
+            return Ok(books);
+        }
+
+        [HttpGet]
+        [Route("get-book-by/{isbn}")]
+        public IActionResult Get(string isbn)
+        {
+            var book = _bookService.GetBookByISBN(isbn);
+            if (book == null) return NotFound("Book Not Found");
+
+            return Ok(book);
+        }
+
+        [HttpGet]
+        [Route("all-books")]
+        public IActionResult Get()
+        {
+            var books = _bookService.GetAllBooks();
+            if (books == null) return NotFound("No book found");
+            return Ok(books);
         }
     }
 }

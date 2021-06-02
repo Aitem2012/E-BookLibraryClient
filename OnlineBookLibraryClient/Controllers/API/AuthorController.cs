@@ -15,10 +15,10 @@ namespace OnlineBookLibraryClient.Controllers.API
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private readonly IAuthorRepository _author;
+        private readonly IAuthorService _author;
         private readonly IMapper _mapper;
 
-        public AuthorController(IAuthorRepository author, IMapper mapper)
+        public AuthorController(IAuthorService author, IMapper mapper)
         {
             _author = author;
             _mapper = mapper;
@@ -31,15 +31,11 @@ namespace OnlineBookLibraryClient.Controllers.API
         {
             try
             {
-                var authorExist = _author.GetAuthor(model.Id);
+                var authorExist = _author.GetAuthorByName(model.FirstName, model.LastName);
                 if (authorExist != null) return BadRequest("Author Already Exist");
 
-                var author = new Author
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
-                };
-                var authorIsSuccessfullyRegistered = await _author.Add(author);
+                
+                var authorIsSuccessfullyRegistered = await _author.Add(model);
                 if (!authorIsSuccessfullyRegistered) return StatusCode(500, "Something went wrong. Try Again Later");
                 return Ok("Author Successfully Registered");
             }
@@ -74,7 +70,7 @@ namespace OnlineBookLibraryClient.Controllers.API
         {
             try
             {
-                var author = _author.GetAuthor(name);
+                var author = _author.GetAuthorById(name);
                 if (author == null) return BadRequest($"No Author with the name of {name}");
 
                 return Ok(author);
@@ -92,13 +88,13 @@ namespace OnlineBookLibraryClient.Controllers.API
         {
             try
             {
-                var author = _author.GetAuthor(name);
+                var author = _author.GetAuthorById(name);
                 if (author == null) return BadRequest($"No Author with the id of {name}");
 
-                author.FirstName = model.FirstName;
-                author.LastName = model.LastName;
-
-                await _author.Update(author);
+                if (!await _author.Update(name, model))
+                {
+                    return BadRequest("Author Could not be update");
+                }
                 return Ok("Author has been successfully updated");
             }
             catch (Exception)
@@ -108,14 +104,14 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
         [HttpDelete]
         [Route("delete/{id}")]
-        public async Task<IActionResult> DeleteAuthor(int name)
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
             try
             {
-                var author = _author.GetAuthor(name);
-                if (author == null) return BadRequest($"No Author with the name of {name}");
+                var author = _author.GetAuthorById(id);
+                if (author == null) return BadRequest($"No Author with the name of {id}");
 
-                await _author.Delete(author);
+                await _author.Delete(id);
                 return Ok("Author has been successfully deleted");
             }
             catch (Exception)
