@@ -56,11 +56,11 @@ namespace OnlineBookLibraryClient.Controllers.API
         }
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
+        public async Task<RegisterDTO> Register([FromBody] RegisterDTO model)
         {
             //Creating New User
             var userExist = await _userManager.FindByEmailAsync(model.Email);
-            if (userExist != null) return BadRequest("Email Exist");
+            if (userExist != null) throw new Exception();
             var user = new AppUser
             {
                 FirstName = model.FirstName,
@@ -79,11 +79,17 @@ namespace OnlineBookLibraryClient.Controllers.API
 
             if (!result.Succeeded)
             {
-                return BadRequest("something went wrong");
+               throw new Exception ("something went wrong");
             }
             //Add Role to User
             await _userManager.AddToRoleAsync(user, "Regular User");
-            return Ok("Registration successful");
+            var modelToReturn = new RegisterDTO
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email
+            };
+            return modelToReturn;
         }
 
 
@@ -92,21 +98,22 @@ namespace OnlineBookLibraryClient.Controllers.API
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return NotFound("fail");
             var x = await _signManager.PasswordSignInAsync(user, model.Password, false, false); ;
 
             if (!x.Succeeded)
             {
-                return BadRequest("something went wrong");
+                return BadRequest("fail");
             }
 
-            
+            var tokenGen = new TokenGenerator(_userManager, _options);
             var token = await tokenGen.GenerateToken(user);
             if (token == null)
             {
                 return BadRequest();
             }
 
-            return Ok(GetUserRole(token));
+            return Ok( new { token });
         }
 
         public IActionResult GetUserRole(string token)
