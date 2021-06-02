@@ -1,4 +1,5 @@
-﻿using OnlineBookLibraryClient.Lib.Model;
+﻿using Microsoft.AspNetCore.Http;
+using OnlineBookLibraryClient.Lib.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace OnlineBookLibrary.Lib.DTO
         public string Title { get; set; }        
         public Genre Genre { get; set; }
         public string Language { get; set; }
-        public string Photo { get; set; }
+        public IFormFile Photo { get; set; }
         public Publisher Publisher { get; set; }
         public DateTime PublicationDate { get; set; } = DateTime.Now;        
         public string ISBN { get; set; }

@@ -11,6 +11,6 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
     {
         public Review GetReview(int id);
         public IQueryable<Review> GetReviews();
-        public IQueryable<Review> GetReviewsByUser(int id);
+        public IQueryable<Review> GetReviewsByBookId(int id);
     }
 }

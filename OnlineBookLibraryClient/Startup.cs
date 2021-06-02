@@ -44,11 +44,13 @@ namespace OnlineBookLibraryClient
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IPublisherRepository, PublisherRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
 
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IGenreService, GenreService>();
             services.AddTransient<IAuthorService, AuthorServices>();
             services.AddTransient<IPublisherService, PublisherService>();
+            services.AddTransient<IReviewService, ReviewService>();
 
             services.AddDbContextPool<LibraryDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("Default")));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());

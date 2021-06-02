@@ -33,7 +33,7 @@ namespace OnlineBookLibraryClient.Lib.Model
 
         public int Pages { get; set; }
         public string Description { get; set; }
-        public int Rating { get; set; }
+        //public int Rating { get; set; }
         public IEnumerable<Review> Reviews { get; set; }
     }
 }
