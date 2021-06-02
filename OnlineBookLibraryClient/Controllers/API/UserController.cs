@@ -26,11 +26,9 @@ namespace OnlineBookLibraryClient.Controllers.API
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IOptionsMonitor<JwtConfig> _options;
-<<<<<<< HEAD
         private TokenGenerator tokenGen; 
-=======
         private readonly ICloudinaryService _cloudinaryService;
->>>>>>> 3d09699778a6ef0535fb2f51c01979773165ba4e
+
 
         public UserController(LibraryDbContext context, UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signManager, RoleManager<IdentityRole> roleManager,
@@ -43,11 +41,8 @@ namespace OnlineBookLibraryClient.Controllers.API
             _roleManager = roleManager;
             _mapper = mapper;
             _options = options;
-<<<<<<< HEAD
             tokenGen = new TokenGenerator(_userManager, _options);
-=======
             _cloudinaryService = cloudinaryService;
->>>>>>> 3d09699778a6ef0535fb2f51c01979773165ba4e
         }
 
         [HttpGet]
