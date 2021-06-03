@@ -24,11 +24,13 @@ namespace OnlineBookLibrary.Lib.Core.Services
         private readonly IPublisherService _publisherService;
         private readonly IAuthorService _authorService;
         private readonly ICloudinaryService _cloudinary;
+        private readonly IReviewRepository _review;
 
         public BookService(IBookRepository book, IAuthorRepository author, IGenreRepository genre, IPublisherRepository publisher,
             IGenreService genreService, IPublisherRepository publisherRepository, IPublisherService publisherService,
-            IAuthorService authorService, ICloudinaryService cloudinary)
+            IAuthorService authorService, ICloudinaryService cloudinary, IReviewRepository review)
         {
+            _review = review;
             _bookRepo = book;
             _authorRepo = author;
             _genreRepo = genre;
@@ -40,6 +42,7 @@ namespace OnlineBookLibrary.Lib.Core.Services
             _cloudinary = cloudinary;
            
         }
+
         public Book CreateBook(BookDetailsDTO model)
         {
             //PhotoUpdateDTO photoToAdd = new PhotoUpdateDTO
@@ -143,8 +146,12 @@ namespace OnlineBookLibrary.Lib.Core.Services
             var author = _authorRepo.GetAuthor(book.AuthorId);
             var publisher = _publisher.GetPublisher(book.PublisherId);
             var genre = _genreRepo.GetGenre(book.GenreId);
-
-            
+            var reviews = _review.GetReviewsByBookId(book.Id);
+            int Rate = 0;
+            foreach(var review in reviews)
+            {
+                Rate += review.Ratings;
+            }
 
             return new BookResponseDTO
             {
@@ -152,12 +159,13 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 ISBN = book.ISBN,
                 PublisherName = publisher.PublisherName,
                 GenreName = genre.GenreName,
+                Photo = book.Photo,
                 Language = book.Language,
                 Pages = book.Pages,
-                
+                Description = book.Description,
+                Rating = Rate,
                 AuthorName = $"{author.FirstName} {author.LastName}"
-            }
-            ;
+            };            
         }
 
         public async Task<Book> RegisterBook (BookDetailsDTO model)
@@ -173,13 +181,10 @@ namespace OnlineBookLibrary.Lib.Core.Services
                 GenreName = model.Genre.GenreName
             };
 
-
-
             if (genreExist == null)
             {
                 genreExist = _genreService.CreateGenre(myGenre);
                 if (!await _genreRepo.Add(genreExist)) throw new InvalidOperationException("Genre Could not be created");
-
             }
 
             var publisherExist = _publisherService.GetPublisherByName(model.Publisher.PublisherName);

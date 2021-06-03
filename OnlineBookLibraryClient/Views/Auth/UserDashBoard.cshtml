@@ -19,44 +19,47 @@
 </div>
 
 <div class="row">
-    <p>Showing 1 result for <strong>Book</strong></p>
+    <p>Showing 1 result for <strong>@Model.Title</strong></p>
 </div>
 
 <div class="row">
     <div class="col-3 p-0 m-0">
-        <img src="~/images/book1.jpg" width="100%" alt="" />
+        <img asp-append-version="true" src="@Model.Photo" width="100%" alt="" />
 
     </div>
 
-    <div class="col-8 ml-3 pl-0">
-        <h6>Winning Digital Age</h6>
-        <p class="mb-0 small"><small>Available copies:</small> <strong>15</strong> &nbsp;&nbsp;<small>Copies in library</small> <strong>20</strong> &nbsp;&nbsp;<small>Copies taken out</small> <strong>5</strong></p>
-        <p class="mb-0 small"><small>Genre:</small> &nbsp;<strong>Business & Economics</strong></p>
-        <p class="mb-0 small"><small>Author:</small> &nbsp;<strong>Golden Ezekiel</strong></p>
-        <p class="mb-0 small"><small>Language:</small> &nbsp;<strong>English</strong></p>
-        <p class="mb-0 small"><small>Publisher:</small> &nbsp;<strong>GoldPen</strong></p>
-        <p class="mb-0 small"><small>Published Date:</small> &nbsp;<strong>31 Febuary 2022</strong></p>
-        <p class="mb-0 small"><small>Added to Library:</small> &nbsp;<strong>31 Febuary 2022</strong></p>
-        <p class="mb-0 small"><small>ISBN:</small> &nbsp;<strong>1234567890</strong></p>
-        <p class="mb-0 small"><small>Pages:</small> &nbsp;<strong>500</strong></p>
-        <pre class="small"><small>Description:</small>&nbsp;A book for understanding how to make moneyA book for understanding how to make money
-           A book for understanding how to make moneyA book for understanding how to make money
+    <div class="col-8 ml-3 pl-0 pt-2">
+        <h5><strong>@Model.Title</strong></h5>
+        <p class="mb-0 small"><small>Genre:</small> &nbsp;<strong>@Model.GenreName</strong></p>
+        <p class="mb-0 small"><small>Author:</small> &nbsp;<strong>@Model.AuthorsFirstName @Model.AuthorsLastName</strong></p>
+        <p class="mb-0 small"><small>Language:</small> &nbsp;<strong>@Model.Language</strong></p>
+        <p class="mb-0 small"><small>Publisher:</small> &nbsp;<strong>@Model.PublisherName</strong></p>
+        <p class="mb-0 small"><small>ISBN:</small> &nbsp;<strong>@Model.ISBN</strong></p>
+        <p class="mb-0 small"><small>Pages:</small> &nbsp;<strong>@Model.Pages</strong></p>
+        <pre class="small"><small>Description:</small>&nbsp;@Model.Description
         <a href="#"><strong>Read More</strong></a></pre>
         <div style="margin-left:10%;" class="small">
             <p class="small">
                 e-Version &nbsp; Yes &nbsp;&nbsp; <a href="#" class="border border-danger p-1 pr-3 pl-3 mr-3 bg-primary text-white" style="border-radius:15px;text-decoration:none;"><small>Read More</small></a>
                 <a href="#" class="border border-danger p-1 pr-3 pl-3 bg-light text-dark" style="border-radius:15px;text-decoration:none"><small>Download</small></a>
             </p>
-            <p class="small">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <strong>3</strong>
-            </p>
+            @for (int n = 1; n <= 5; n++)
+            {
+                if (Model.Rating >= n)
+                {
+                    <i class="fas fa-star"></i>
+                }
+                else if (Model.Rating < n && Model.Rating > (n - 1))
+                {
+                    <i class="fas fa-star-half-alt"></i>
+                }
+                else
+                {
+                    <i class="far fa-star"></i>
+                }
+            }
 
-            <h6 class="small"><strong>Reviews</strong></h6>
+            <h6 class="small mt-3"><strong>Reviews</strong></h6>
             <h6 class="small mb-0"><strong>Good to Read</strong></h6>
             <p class="small">A nice book to read. Please get your copy</p>
 

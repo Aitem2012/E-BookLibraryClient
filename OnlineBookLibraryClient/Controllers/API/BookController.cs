@@ -70,6 +70,7 @@ namespace OnlineBookLibraryClient.Controllers.API
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Fatal Error");
             }
         }
+
         /// <summary>
         /// Gets Paginated List according to Search Query
         /// </summary>
