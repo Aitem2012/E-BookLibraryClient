@@ -27,7 +27,7 @@
             <div class="card col-lg-3 col-sm-6 col-md-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-center align-items-center">
-                        <img src = @item.Photo alt="book1" style="min-width:98%" />
+                        <img class="card-img-top" asp-append-version="true" src="@item.Photo" alt="book1" style="min-width:98%" />
                     </div>
                 </div>
                 <div class="card-footer">
@@ -55,7 +55,8 @@
                                 <i class="far fa-star"></i>
                             }
                         }
-                    <a asp-controller="Auth" asp-action="UserDashboard" method="Get">See More</a>
+
+                    <a asp-controller="Auth" asp-action="UserDashboard" asp-route-id="@item.ISBN">See More</a>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineBookLibrary.Lib.Core.Interfaces;
 using OnlineBookLibrary.Lib.DTO;
 using OnlineBookLibraryClient.Lib.Model;
 using OnlineBookLibraryClient.ViewModel;
@@ -14,6 +15,12 @@ namespace OnlineBookLibraryClient.Controllers
 {
     public class FormController: Controller
     {
+        private readonly ICloudinaryService _cloudinary;
+
+        public FormController(ICloudinaryService cloudinary)
+        {
+            _cloudinary = cloudinary;
+        }
         [HttpGet]
         public IActionResult Book()
         {
@@ -26,6 +33,7 @@ namespace OnlineBookLibraryClient.Controllers
         {
             var url = "http://localhost:39523/api/book/register/";
             HttpClient client = new HttpClient();
+            var photo = await _cloudinary.AddPatchPhoto(new PhotoUpdateDTO { PhotoUrl = model.Photo});
             BookDetailsDTO book = new BookDetailsDTO
             {
                 Title = model.Title,
@@ -33,7 +41,8 @@ namespace OnlineBookLibraryClient.Controllers
                 {
                     GenreName = model.GenreName,
                 },
-                Photo = model.Photo,
+                Photo = null,
+                PhotoUrl = photo,
                 ISBN = model.ISBN,
                 Language = model.Language,
                 Publisher = new Publisher
@@ -64,7 +73,7 @@ namespace OnlineBookLibraryClient.Controllers
             }
             else
             {
-                return View();
+                return Redirect("Book");
             }
 
             

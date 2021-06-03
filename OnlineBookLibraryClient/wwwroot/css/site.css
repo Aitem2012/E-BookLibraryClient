@@ -9,7 +9,7 @@ a {
     color: #0366d6;
 }
 
-.form {
+/*.form {
     width: 500px;
     padding: 40px;
     position: relative;
@@ -19,7 +19,7 @@ a {
     text-align: center;
     transition: 0.25s;
     margin-top: 50px
-}
+}*/
 
     .form input[type="text"],
     .form input[type="password"] {
