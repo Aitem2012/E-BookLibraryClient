@@ -11,7 +11,8 @@ namespace OnlineBookLibrary.Lib.DTO
     public class BookDetailsDTO
     {
         public int Id { get; set; }
-        public string Title { get; set; }        
+        public string Title { get; set; }
+        public string PhotoUrl { get; set; }
         public Genre Genre { get; set; }
         public string Language { get; set; }
         public IFormFile Photo { get; set; }

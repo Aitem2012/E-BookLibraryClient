@@ -96,7 +96,7 @@ namespace OnlineBookLibraryClient.Controllers.ApiController
 
 
 
-            var book = await _bookService.CreateBook(model);
+            var book = _bookService.CreateBook(model);
 
             if (!await _bookRepo.Add(book)) return StatusCode(500, "An Error Occur, Book could not be created"); ;
 

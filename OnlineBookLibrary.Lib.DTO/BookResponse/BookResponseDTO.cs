@@ -17,5 +17,6 @@ namespace OnlineBookLibrary.Lib.DTO.BookResponse
         public int Rating { get; set; }
         public string AuthorName { get; set; }
         public string Description { get; set; }
+        public string Photo { get; set; }
     }
 }

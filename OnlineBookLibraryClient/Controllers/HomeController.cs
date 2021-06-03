@@ -36,10 +36,10 @@ namespace OnlineBookLibraryClient.Controllers
                 {
                     Title = item.Title,
                     GenreName = item.GenreName,
-                    
+                    Photo = item.Photo,
                     Rating = item.Rating,
                     AuthorsFirstName = item.AuthorName,
-                    
+                    ISBN = item.ISBN,
                     Description = item.Description
                 };
                 output.Add(obj);

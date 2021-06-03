@@ -11,7 +11,7 @@ namespace OnlineBookLibrary.Lib.Core.Interfaces
 {
     public interface IBookService
     {
-        public Task<Book> CreateBook(BookDetailsDTO model);
+        public Book CreateBook(BookDetailsDTO model);
         public IEnumerable<BookResponseDTO> GetBooksByAuthor(int id);
         public BookResponseDTO GetBookByISBN(string isbn);
         public IEnumerable<BookResponseDTO> GetAllBooks();
