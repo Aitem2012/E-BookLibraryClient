@@ -111,22 +111,26 @@ namespace OnlineBookLibraryClient.Controllers
         [HttpGet]
         public async Task<IActionResult> UserDashBoard(string isbn)
         {
-            //var url = "http://localhost:39523/api/book/get-book-by/{isbn}";
-            //HttpClient client = new HttpClient();
-            //var userResponse = await client.GetAsync(url);
-            //var content = await userResponse.Content.ReadAsStringAsync();
-            //var responseDto = JsonConvert.DeserializeObject<BookResponseDTO>(content);
-            //return View(new BookResponseViewModel {
-            //    Title = responseDto.Title,
-            //    GenreName = responseDto.GenreName,
-            //    Photo = responseDto.Photo,
-            //    Rating = responseDto.Rating,
-            //    AuthorsFirstName = responseDto.AuthorName,
-            //    ISBN = responseDto.ISBN,
-            //    Description = responseDto.Description
-            //});
-            return View();
+            var url = $"http://localhost:39523/api/book/get-book-by/{isbn}";
+            HttpClient client = new HttpClient();
+            var userResponse = await client.GetAsync(url);
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var responseDto = JsonConvert.DeserializeObject<BookResponseDTO>(content);
+            var obj = new BookResponseViewModel {
+                Title = responseDto.Title,
+                GenreName = responseDto.GenreName,
+                Photo = responseDto.Photo,
+                Rating = responseDto.Rating,
+                AuthorsFirstName = responseDto.AuthorName,
+                Language = responseDto.Language,
+                Pages = responseDto.Pages,
+                PublisherName = responseDto.PublisherName,
+               ISBN = responseDto.ISBN,
+               Description = responseDto.Description
+           };
+            return View(obj);
         }
+
         public IActionResult AdminDashboard()
         {
             return View();
